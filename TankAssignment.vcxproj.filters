@@ -250,8 +250,37 @@
     <None Include="Source\Render\TankAssignment.fx">
       <Filter>Render</Filter>
     </None>
+    <None Include="..\..\ParticleSystem\Common.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Entities.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\ParticleSystem\WorldTransformOnly_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\TintedTexture_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\PixelLighting_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\PixelLighting_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\ParticleUpdate_gs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\ParticleRender_gs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\ParticlePassThru_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\BasicTransform_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

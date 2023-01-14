@@ -1,14 +1,10 @@
-﻿  ParseLevel.cpp
-  RayCast.cpp
-  AmmoCrateEntity.cpp
-  EntityManager.cpp
-  HealthCrateEntity.cpp
-  Messenger.cpp
-  MineEntity.cpp
-  ShellEntity.cpp
-  TankEntity.cpp
+﻿  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\BasicTransform_vs.cso
+  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\ParticlePassThru_vs.cso
+  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\ParticleRender_gs.cso
+  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\ParticleUpdate_gs.cso
+  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\PixelLighting_ps.cso
+  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\PixelLighting_vs.cso
+  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TintedTexture_ps.cso
+  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\WorldTransformOnly_vs.cso
   TankAssignment.cpp
-D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\Source\TankAssignment.cpp(373,13): warning C4244: 'initializing': conversion from 'float' to 'gen::TInt32', possible loss of data
-D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\Source\TankAssignment.cpp(373,23): warning C4244: 'initializing': conversion from 'float' to 'gen::TInt32', possible loss of data
-  Generating Code...
   TankAssignment.vcxproj -> D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TankAssignment.exe
