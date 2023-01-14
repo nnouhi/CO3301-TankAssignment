@@ -370,7 +370,7 @@ void ShowTankInfo(stringstream& outText)
 		if (tankEntity != 0)
 		{
 			CVector3 entityPosition = tankEntity->Position();
-			TInt32 X = 0.0f, Y = 0.0f;
+			TInt32 X = 0, Y = 0;
 
 			if (MainCamera->PixelFromWorldPt(entityPosition, ViewportWidth, ViewportHeight, &X, &Y))
 			{

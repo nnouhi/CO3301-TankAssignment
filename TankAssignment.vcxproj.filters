@@ -19,6 +19,9 @@
     <Filter Include="Math">
       <UniqueIdentifier>{7424d7d2-c818-4117-bbab-d74c82b531aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{b16d0b05-b1bb-46be-8dbb-5784ac420d52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Scene\Camera.cpp">
@@ -116,11 +119,11 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\TankAssignment.cpp" />
-    <ClCompile Include="Source\Common\ParseLevel.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Common\tinyxml2.cpp">
-      <Filter>Common</Filter>
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\ParseLevel.cpp">
+      <Filter>XML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,11 +236,11 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\TankAssignment.h" />
-    <ClInclude Include="Source\Common\ParseLevel.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Common\tinyxml2.h">
-      <Filter>Common</Filter>
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\ParseLevel.h">
+      <Filter>XML</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
