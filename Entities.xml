@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<!-- Level Setup -->
+<Level>
+
+  <!-- Entity Templates -->
+  <Templates>
+  
+    <!-- Enviroment Bodies -->
+    <EntityTemplate Type="Scenery" Name="Skybox" Mesh="Skybox.x"/>
+    <EntityTemplate Type="Scenery" Name="Floor" Mesh="Floor.x"/>
+    <EntityTemplate Type="Scenery" Name="Building" Mesh="Building.x"/>
+    <EntityTemplate Type="Scenery" Name="Tree" Mesh="Tree1.x"/>
+  
+
+    <!-- Tank Types -->
+    <EntityTemplate Type="Tank" Name="Rogue Scout" Mesh="HoverTank02.x" MaxSpeed="40.0" Acceleration="4.2" TurnSpeed="2.0" TurretTurnSpeed="1.047" MaxHP="200" ShellDamage="20"/>
+    <EntityTemplate Type="Tank" Name="Oberon MkII" Mesh="HoverTank07.x" MaxSpeed="30.0" Acceleration="2.6" TurnSpeed="1.3" TurretTurnSpeed="0.785" MaxHP="180" ShellDamage="35"/>
+
+    <!-- Other Types -->
+    <EntityTemplate Type="Projectile" Name="Shell Type 1" Mesh="Bullet.x"/>
+    <EntityTemplate Type="Ammo" Name="AmmoCrate" Mesh="AmmoCrate.x"/>
+    <EntityTemplate Type="Health" Name="HealthCrate" Mesh="HealthCrate.x"/>
+    <EntityTemplate Type="Mine" Name="Mine" Mesh="Mine.x"/>
+    
+  </Templates>
+  <!-- End of Entity Types -->
+
+  
+  <!-- Scene Setup -->
+  <Entities>
+
+    <!-- Enviroment Positions -->
+    <Entity Type="Skybox" Name="Skybox">
+      <Position X="0.0" Y="-10000.0" Z="0.0"/>
+      <Scale X="10.0" Y="10.0" Z="10.0"/>
+    </Entity>
+    <Entity Type="Floor" Name="Floor">
+    </Entity>
+    <Entity Type="Building" Name="Building">
+      <Position X="0.0" Y="0.0" Z="10000.0"/>
+    </Entity>
+
+    <!-- Scene objects Positions -->
+    <Entity Type="Tree" Name="Tree" Number="100">
+      <Position X="0.0" Y="0.0" Z="95.0">
+        <Randomise X="150.0" Y="0.0" Z="110.0"/>
+      </Position>
+      <Rotation X="0.0" Y="0.0" Z="0.0">
+        <Randomise X="0.0" Y="360.0" Z="0.0"/>
+      </Rotation>
+    </Entity>
+
+    <!-- Tank Positions -->
+    <!-- TEAM 0 -->
+    <Entity Type="Rogue Scout" Name="A-1" Team="0">
+      <Position X="-75.0" Y="0.5" Z="20.0"/>
+      <Rotation X="0.0" Y="90.0" Z="0.0"/>
+      <ListWaypoints>
+        <Waypoint X="-30.0" Y="0.5" Z="20.0"/>
+        <Waypoint X="-15.0" Y="0.5" Z="25.0"/>
+        <Waypoint X="-30.0" Y="0.5" Z="-20.0"/>
+      </ListWaypoints>
+    </Entity>
+    <Entity Type="Rogue Scout" Name="A-2" Team="0">
+      <Position X="-65.0" Y="0.5" Z="0.0"/>
+      <Rotation X="0.0" Y="90.0" Z="0.0"/>
+      <ListWaypoints>
+        <Waypoint X="-20.0" Y="0.5" Z="0.0"/>
+        <Waypoint X="-10.0" Y="0.5" Z="0.0"/>
+        <Waypoint X="-30.0" Y="0.5" Z="20.0"/>
+      </ListWaypoints>
+    </Entity>
+    <Entity Type="Rogue Scout" Name="A-3" Team="0">
+      <Position X="-75.0" Y="0.5" Z="-20.0"/>
+      <Rotation X="0.0" Y="90.0" Z="0.0"/>
+      <ListWaypoints>
+        <Waypoint X="-30.0" Y="0.5" Z="-20.0"/>
+        <Waypoint X="-15.0" Y="0.5" Z="-25.0"/>
+        <Waypoint X="-20.0" Y="0.5" Z="0.0"/>
+      </ListWaypoints>
+    </Entity>
+
+    <!-- TEAM 1 -->
+    <Entity Type="Oberon MkII" Name="B-1" Team="1">
+      <Position X="75.0" Y="0.5" Z="20.0"/>
+      <Rotation X="0.0" Y="-90.0" Z="0.0"/>
+      <ListWaypoints>
+        <Waypoint X="30.0" Y="0.5" Z="20.0"/>
+        <Waypoint X="15.0" Y="0.5" Z="25.0"/>
+        <Waypoint X="30.0" Y="0.5" Z="-20.0"/>
+      </ListWaypoints>
+    </Entity>
+    <Entity Type="Oberon MkII" Name="B-2" Team="1">
+      <Position X="65.0" Y="0.5" Z="0.0"/>
+      <Rotation X="0.0" Y="-90.0" Z="0.0"/>
+      <ListWaypoints>
+        <Waypoint X="20.0" Y="0.5" Z="0.0"/>
+        <Waypoint X="10.0" Y="0.5" Z="0.0"/>
+        <Waypoint X="30.0" Y="0.5" Z="20.0"/>
+      </ListWaypoints>
+    </Entity>
+    <Entity Type="Oberon MkII" Name="B-3" Team="1">
+      <Position X="75.0" Y="0.5" Z="-20.0"/>
+      <Rotation X="0.0" Y="-90.0" Z="0.0"/>
+      <ListWaypoints>
+        <Waypoint X="30.0" Y="0.5" Z="-20.0"/>
+        <Waypoint X="15.0" Y="0.5" Z="-25.0"/>
+        <Waypoint X="30.0" Y="0.5" Z="20.0"/>
+      </ListWaypoints>
+    </Entity>
+
+    <!-- Interactable objects -->
+    <Entity Type="AmmoCrate" Name="Ammo" RotationSpeed="5.0f" RespawnTime="20.0f" PickUpDistance ="5.0f" Number="2">
+      <Position X="0.0" Y="-10.0" Z ="0.0"/>      
+    </Entity>
+    <Entity Type="HealthCrate" Name="Health" RotationSpeed="5.0f" RespawnTime="25.0f" PickUpDistance ="5.0f" Number="2">
+      <Position X="0.0" Y="-10.0" Z ="0.0"/>
+    </Entity>
+    <Entity Type="Mine" Name="Mine" RespawnTime="15.0" DamageRadius="10.0" Number="5">
+      <Position X="0.0" Y="-10.0" Z ="0.0"/>
+    </Entity>
+    
+  </Entities>
+  <!-- End of Scene Setup -->
+
+</Level>
