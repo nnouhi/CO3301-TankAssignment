@@ -22,6 +22,9 @@
     <Filter Include="XML">
       <UniqueIdentifier>{b16d0b05-b1bb-46be-8dbb-5784ac420d52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{f9f4d6ae-2c5d-47ee-92c7-d3f39505b8c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Scene\Camera.cpp">

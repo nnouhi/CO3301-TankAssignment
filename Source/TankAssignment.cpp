@@ -115,91 +115,10 @@ bool SceneSetup()
 	InitialiseMethods();
 	LevelParser.ParseFile("Entities.xml");
 
-	//////////////////////////////////////////
-	// Create scenery templates and entities
-
-	// Create scenery templates - loads the meshes
-	// Template type, template name, mesh name
-	/*EntityManager.CreateTemplate("Scenery", "Skybox", "Skybox.x");
-	EntityManager.CreateTemplate("Scenery", "Floor", "Floor.x");
-	EntityManager.CreateTemplate("Scenery", "Building", "Building.x");
-	EntityManager.CreateTemplate("Scenery", "Tree", "Tree1.x");*/
-
-	// Creates scenery entities
-	// Type (template name), entity name, position, rotation, scale
-	/*EntityManager.CreateEntity("Skybox", "Skybox", CVector3(0.0f, -10000.0f, 0.0f), CVector3::kZero, CVector3(10, 10, 10));
-	EntityManager.CreateEntity("Floor", "Floor");
-	EntityManager.CreateEntity("Building", "Building", CVector3(0.0f, 0.0f, 10000.0f), CVector3(0.0f, 0.0f, 0.0f));*/
-	//for (int tree = 0; tree < 100; ++tree)
-	//{
-	//	// Some random trees
-	//	EntityManager.CreateEntity( "Tree", "Tree",
-	//		                        CVector3(Random(-200.0f, 30.0f), 0.0f, Random(40.0f, 150.0f)),
-	//		                        CVector3(0.0f, Random(0.0f, 2.0f * kfPi), 0.0f) );
-	//}
-
-
-	///////////////////////////////////
-	//// Create tank templates
-
-	// Template type, template name, mesh name, top speed, acceleration, tank turn speed, turret
-	// turn speed, max HP and shell damage. These latter settings are for advanced requirements only
-	//EntityManager.CreateTankTemplate("Tank", "Rogue Scout", "HoverTank02.x",
-	//	40.0f, 4.2f, 2.0f, kfPi / 3, 200, 20);
-	//EntityManager.CreateTankTemplate("Tank", "Oberon MkII", "HoverTank07.x",
-	//	30.0f, 2.6f, 1.3f, kfPi / 4, 200, 35);
-
-	//// Template for tank shell
-	//EntityManager.CreateTemplate("Projectile", "Shell Type 1", "Bullet.x");
-
-	//// Template for ammo crate
-	//EntityManager.CreateTemplate("Ammo", "AmmoCrate", "Cube.x");
-
-	// Dictionary that stores the patrol path for each tank
-	//std::map<TInt32, vector<CVector3>> tankPatrolPaths
-	//{
-	//	// Team A
-	//	{0, { CVector3(-30.0f, 0.5f, 20.0f), CVector3(-15.0f, 0.5f, 25.0f), CVector3(-30.0f, 0.5f, -20.0f) }},
-	//	{1, { CVector3(-20.0f, 0.5f, 0.0f), CVector3(-10.0f, 0.5f, 0.0f), CVector3(-30.0f, 0.5f, 20.0f) }},
-	//	{2, { CVector3(-30.0f, 0.5f, -20.0f), CVector3(-15.0f, 0.5f, -25.0f), CVector3(-20.0f, 0.5f, 0.0f) }},
-
-	//	// Team B
-	//	{3, { CVector3(30.0f, 0.5f, 20.0f),  CVector3(15.0f, 0.5f, 25.0f), CVector3(30.0f, 0.5f, -20.0f) }},
-	//	{4, { CVector3(20.0f, 0.5f, 0.0f), CVector3(10.0f, 0.5f, 0.0f), CVector3(30.0f, 0.5f, 20.0f) }},
-	//	{5, { CVector3(30.0f, 0.5f, -20.0f), CVector3(15.0f, 0.5f, -25.0f), CVector3(30.0f, 0.5f, 20.0f) }}
-	//};
-
-	////////////////////////////////
-	// Create tank entities
-
-	//// Type (template name), team number, tank name, position, rotation
-	//// Team A
-	//tanks[0] = EntityManager.CreateTank("Rogue Scout", 0, "A-1", CVector3(-75.0f, 0.5f, 20.0f),
-	//	CVector3(0.0f, ToRadians(90.0f), 0.0f));
-
-	//tanks[1] = EntityManager.CreateTank("Rogue Scout", 0, "A-2", CVector3(-65.0f, 0.5f, 0.0f),
-	//	CVector3(0.0f, ToRadians(90.0f), 0.0f));
-
-	//tanks[2] = EntityManager.CreateTank("Rogue Scout", 0, "A-3", CVector3(-75.0f, 0.5f, -20.0f),
-	//	CVector3(0.0f, ToRadians(90.0f), 0.0f));
-	//
-	//// Team B
-	//tanks[3] = EntityManager.CreateTank("Oberon MkII", 1, "B-1", CVector3(75.0f, 0.5f, 20.0f),
-	//	CVector3(0.0f, ToRadians(-90.0f), 0.0f));
-
-	//tanks[4] = EntityManager.CreateTank("Oberon MkII", 1, "B-2", CVector3(65.0f, 0.5f, 0.0f),
-	//	CVector3(0.0f, ToRadians(-90.0f), 0.0f));
-
-	//tanks[5] = EntityManager.CreateTank("Oberon MkII", 1, "B-3", CVector3(75.0f, 0.5f, -20.0f),
-	//	CVector3(0.0f, ToRadians(-90.0f), 0.0f));
+	
 
 	tankEntities = EntityManager.GetTankEntities();
 	
-	//// Assign patrol paths to each tank
-	//for (TInt32 i = 0; i < tankEntities.size(); i++)
-	//{
-	//	 tankEntities[i]->SetPatrolPoints(tankPatrolPaths[i]);
-	//}
 
 	/////////////////////////////
 	// Camera / light setup
@@ -380,7 +299,7 @@ void ShowTankInfo(stringstream& outText)
 				TInt32 shellsFired = tankEntity->GetShellsFired();
 				TInt32 shellsAvailable = tankEntity->GetShellsAvailable();
 				string tankIntersects = (ray.RayBoxIntersect(entityPosition, Normalise(tankEntity->GetTurretWorldMatrix().ZAxis()), "Building")) ? "Intersects" : "Not";
-#
+
 				// Display extented info
 				if (ShowExtendedInformation)
 				{
@@ -436,22 +355,6 @@ void ShowTankInfo(stringstream& outText)
 // Update the scene between rendering
 void UpdateScene( float updateTime )
 {
-	// Periodically spawn ammo crates
-	/*if (SpawnNewAmmoCrateInterval > 0.0f)
-	{
-		SpawnNewAmmoCrateInterval -= updateTime;
-	}
-	else
-	{
-		if (NumOfSpawnedAmmoCrates < NumOfAmmoCrates)
-		{
-			EntityManager.CreateAmmoCrate("AmmoCrate", AmmoCrateRotSpeed,
-				AmmoCrateRespawnTime, AmmoCratePickUpDistance, "Ammo" + NumOfSpawnedAmmoCrates, CVector3(0.0f, -10.0f, 0.0f), CVector3(0.0f, 0.0f, 0.0f), CVector3(1.0f, 1.0f, 1.0f));
-			NumOfSpawnedAmmoCrates++;
-			SpawnNewAmmoCrateInterval = 20.0f;
-		}
-	}*/
-
 	// Call all entity update functions
 	EntityManager.UpdateAllEntities( updateTime );
 
@@ -576,6 +479,5 @@ void UpdateScene( float updateTime )
 		}
 	}
 }
-
 
 } // namespace gen
