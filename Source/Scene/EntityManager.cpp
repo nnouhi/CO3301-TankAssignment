@@ -173,6 +173,7 @@ TEntityUID CEntityManager::CreateTank
 TEntityUID CEntityManager::CreateShell
 (
 	const string&   templateName,
+	CTankEntity* owner,
 	const string&   name /*= ""*/,
 	const CVector3& position /*= CVector3::kOrigin*/,
 	const CVector3& rotation /*= CVector3( 0.0f, 0.0f, 0.0f )*/,
@@ -183,7 +184,7 @@ TEntityUID CEntityManager::CreateShell
 	CEntityTemplate* entityTemplate = GetTemplate(templateName);
 
 	// Create new tank entity with next UID
-	CEntity* newEntity = new CShellEntity(entityTemplate, m_NextUID, name, position, rotation, scale);
+	CEntity* newEntity = new CShellEntity(entityTemplate, m_NextUID, owner, name, position, rotation, scale);
 
 	// Get vector index for new entity and add it to vector
 	TUInt32 entityIndex = static_cast<int>(m_Entities.size());

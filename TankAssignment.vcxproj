@@ -126,6 +126,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source\Common\ParseLevel.cpp" />
     <ClCompile Include="Source\Common\tinyxml2.cpp" />
     <ClCompile Include="Source\Math\RayCast.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Source\MainApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Source\Common\ParseLevel.h" />
     <ClInclude Include="Source\Common\tinyxml2.h" />
     <ClInclude Include="Source\Math\RayCast.h" />

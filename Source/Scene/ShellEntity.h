@@ -12,6 +12,7 @@ using namespace std;
 #include "Defines.h"
 #include "CVector3.h"
 #include "Entity.h"
+#include "TankEntity.h"
 
 namespace gen
 {
@@ -42,6 +43,7 @@ public:
 	(
 		CEntityTemplate* entityTemplate,
 		TEntityUID       UID,
+		CTankEntity* owner,
 		const string&    name = "",
 		const CVector3&  position = CVector3::kOrigin, 
 		const CVector3&  rotation = CVector3( 0.0f, 0.0f, 0.0f ),
@@ -65,17 +67,39 @@ public:
 
 	const TFloat32 GetTravelDistance() { return m_TravelSpeed * m_LifeDuration; }
 
+	// Getters
+	const CTankEntity* GetOwner() { return m_Owner; }
+
 	// Setters
-	void SetOwner(CEntity* owner) { m_Owner = owner; }
+	void SetOwner(CTankEntity* owner) { m_Owner = owner; }
+
+	void SetPosition(CVector3 newPosition) { Matrix().SetPosition(newPosition); }
+
+	void SetRotation(CVector3 newRotation) { Matrix().FaceTarget(newRotation); }
+	
+	void FireShell(CEntity* entityToFireTo);
 
 
 /////////////////////////////////////
 //	Private interface
 private:
+	enum EState
+	{
+		Alive,
+		Destroyed
+	};
+
+	EState m_State;
 	TFloat32 m_Radius;
 	TFloat32 m_LifeDuration;
 	TFloat32 m_TravelSpeed;
-	CEntity* m_Owner;
+	CTankEntity* m_Owner;
+
+	void AliveBehaviour(TFloat32 updateTime);
+
+	void DestroyedBehaviour(TFloat32 updateTime);
+
+	void UpdateState(EState newState);
 };
 
 

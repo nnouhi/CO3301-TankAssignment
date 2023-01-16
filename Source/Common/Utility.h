@@ -97,6 +97,8 @@ string LastDelimitedSubstr
 	const string& sDelimiter
 );
 
+string SplitString(string stringToSplit);
+
 
 } // namespace gen
 

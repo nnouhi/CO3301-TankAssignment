@@ -22,9 +22,6 @@
     <Filter Include="XML">
       <UniqueIdentifier>{b16d0b05-b1bb-46be-8dbb-5784ac420d52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{f9f4d6ae-2c5d-47ee-92c7-d3f39505b8c2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Scene\Camera.cpp">
@@ -128,6 +125,7 @@
     <ClCompile Include="Source\Common\ParseLevel.cpp">
       <Filter>XML</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Camera.h">
@@ -245,42 +243,43 @@
     <ClInclude Include="Source\Common\ParseLevel.h">
       <Filter>XML</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Render\TankAssignment.fx">
       <Filter>Render</Filter>
     </None>
     <None Include="..\..\ParticleSystem\Common.hlsli">
-      <Filter>Shaders</Filter>
+      <Filter>Render</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Entities.xml" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\ParticleSystem\WorldTransformOnly_vs.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\TintedTexture_ps.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\PixelLighting_vs.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\PixelLighting_ps.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\ParticleUpdate_gs.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\ParticleRender_gs.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="..\..\ParticleSystem\BasicTransform_vs.hlsl">
+      <Filter>Render</Filter>
     </FxCompile>
     <FxCompile Include="..\..\ParticleSystem\ParticlePassThru_vs.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Render</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\BasicTransform_vs.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="..\..\ParticleSystem\ParticleRender_gs.hlsl">
+      <Filter>Render</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\ParticleUpdate_gs.hlsl">
+      <Filter>Render</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\PixelLighting_ps.hlsl">
+      <Filter>Render</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\PixelLighting_vs.hlsl">
+      <Filter>Render</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\TintedTexture_ps.hlsl">
+      <Filter>Render</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\ParticleSystem\WorldTransformOnly_vs.hlsl">
+      <Filter>Render</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

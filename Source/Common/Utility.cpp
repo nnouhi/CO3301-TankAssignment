@@ -56,5 +56,25 @@ string LastDelimitedSubstr
 	}
 }
 
+string SplitString(string stringToSplit)
+{
+	bool firstEncounter = true;
+	string seperatedString = stringToSplit;
+	for (int i = 0; i < stringToSplit.size(); i++)
+	{
+		if (stringToSplit[i] >= 'A' && stringToSplit[i] <= 'Z' && !firstEncounter)
+		{
+			return seperatedString;
+		}
+		else
+		{
+			seperatedString.erase(0, 1);
+			firstEncounter = false;
+		}
+	}
+
+	return seperatedString;
+}
+
 
 } // namespace gen

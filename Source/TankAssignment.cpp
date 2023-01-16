@@ -114,9 +114,6 @@ bool SceneSetup()
 
 	InitialiseMethods();
 	LevelParser.ParseFile("Entities.xml");
-
-	
-
 	tankEntities = EntityManager.GetTankEntities();
 	
 
