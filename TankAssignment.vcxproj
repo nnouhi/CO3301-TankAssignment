@@ -126,10 +126,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source\Common\ParseLevel.cpp" />
     <ClCompile Include="Source\Common\tinyxml2.cpp" />
     <ClCompile Include="Source\Math\RayCast.cpp" />
+    <ClCompile Include="Source\Render\CParticleSystem.cpp" />
+    <ClCompile Include="Source\Render\Shader.cpp" />
     <ClCompile Include="Source\Scene\AmmoCrateEntity.cpp" />
     <ClCompile Include="Source\Scene\Camera.cpp" />
     <ClCompile Include="Source\Scene\MineEntity.cpp" />
@@ -164,10 +165,11 @@
     <ClCompile Include="Source\MainApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="Source\Common\ParseLevel.h" />
     <ClInclude Include="Source\Common\tinyxml2.h" />
     <ClInclude Include="Source\Math\RayCast.h" />
+    <ClInclude Include="Source\Render\CParticleSystem.h" />
+    <ClInclude Include="Source\Render\Shader.h" />
     <ClInclude Include="Source\Scene\AmmoCrateEntity.h" />
     <ClInclude Include="Source\Scene\Camera.h" />
     <ClInclude Include="Source\Scene\MineEntity.h" />
@@ -206,44 +208,35 @@
     <ClInclude Include="Source\Math\MathIO.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\ParticleSystem\Common.hlsli" />
     <None Include="Source\Render\TankAssignment.fx" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Entities.xml" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\ParticleSystem\BasicTransform_vs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\ParticlePassThru_vs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\ParticleRender_gs.hlsl">
+    <FxCompile Include="Source\Render\DX10ParticlesDraw.gsh">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</EnableDebuggingInformation>
     </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\ParticleUpdate_gs.hlsl">
+    <FxCompile Include="Source\Render\DX10ParticlesUpdate.gsh">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</EnableDebuggingInformation>
     </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\PixelLighting_ps.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\PixelLighting_vs.hlsl">
+    <FxCompile Include="Source\Render\PassThruGS.vsh">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</EnableDebuggingInformation>
     </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\TintedTexture_ps.hlsl">
+    <FxCompile Include="Source\Render\TexOnly.psh">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="..\..\ParticleSystem\WorldTransformOnly_vs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</EnableDebuggingInformation>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

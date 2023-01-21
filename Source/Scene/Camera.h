@@ -39,6 +39,7 @@ public:
 	}
 	CMatrix4x4& Matrix()
 	{
+		CalculateMatrices();
 		return m_Matrix;
 	}
 
@@ -79,16 +80,22 @@ public:
 	// Camera matrices - Getters
 	CMatrix4x4 GetViewMatrix()
 	{
+		CalculateMatrices();
 		return m_MatView;
 	}
 	CMatrix4x4 GetProjMatrix()
 	{
+		CalculateMatrices();
 		return m_MatProj;
 	}
 	CMatrix4x4 GetViewProjMatrix()
 	{
+		CalculateMatrices();
 		return m_MatViewProj;
 	}
+	// Directx camera matrises used for particles
+	D3DXMATRIXA16 GetViewD3DXMatrix();
+	D3DXMATRIXA16 GetViewProjectionD3DXMatrix();
 
 
 	/////////////////////////////

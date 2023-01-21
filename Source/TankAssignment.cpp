@@ -21,6 +21,7 @@ using namespace std;
 #include "CVector4.h"
 #include "RayCast.h"
 #include "ParseLevel.h"
+#include "CParticleSystem.h"
 
 namespace gen
 {
@@ -63,10 +64,11 @@ extern CMessenger Messenger;
 // Global game/scene variables
 //-----------------------------------------------------------------------------
 
-// Entity manager
+// Constructors
 CEntityManager EntityManager;
 CParseLevel LevelParser(&EntityManager);
 CRayCast ray = &EntityManager;
+CParticalSystem particalSystem;
 
 // Tank UIDs
 //TEntityUID TankA;
@@ -83,7 +85,7 @@ CEntity* SelectedEntity = 0;
 const INT32 NumLights = 2;
 CLight*  Lights[NumLights];
 SColourRGBA AmbientLight;
-CCamera* MainCamera;
+CCamera* m_MainCamera;
 CCamera* FreeMovingCamera;
 
 const INT32 NumOfAmmoCrates = 2;
@@ -115,7 +117,6 @@ bool SceneSetup()
 	InitialiseMethods();
 	LevelParser.ParseFile("Entities.xml");
 	tankEntities = EntityManager.GetTankEntities();
-	
 
 	/////////////////////////////
 	// Camera / light setup
@@ -124,7 +125,7 @@ bool SceneSetup()
 	FreeMovingCamera = new CCamera(CVector3(0.0f, 75.0f, -160.0f), CVector3(ToRadians(30.0f), 0, 0));
 	FreeMovingCamera->SetNearFarClip(1.0f, 20000.0f);
 
-	MainCamera = FreeMovingCamera;
+	m_MainCamera = FreeMovingCamera;
 
 	// Sunlight and light in building
 	Lights[0] = new CLight(CVector3(-5000.0f, 4000.0f, -10000.0f), SColourRGBA(1.0f, 0.9f, 0.6f), 15000.0f);
@@ -133,6 +134,7 @@ bool SceneSetup()
 	// Ambient light level
 	AmbientLight = SColourRGBA(0.6f, 0.6f, 0.6f, 1.0f);
 
+	particalSystem.Setup();
 	return true;
 }
 
@@ -150,7 +152,7 @@ void SceneShutdown()
 	}
 
 	// Release camera
-	delete MainCamera;
+	delete m_MainCamera;
 
 	// Destroy all entities
 	EntityManager.DestroyAllEntities();
@@ -175,35 +177,36 @@ TEntityUID GetTankUID(int team)
 // Draw one frame of the scene
 void RenderScene( float updateTime )
 {
-	// Setup the viewport - defines which part of the back-buffer we will render to (usually all of it)
-	D3D10_VIEWPORT vp;
-	vp.Width  = ViewportWidth;
-	vp.Height = ViewportHeight;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	g_pd3dDevice->RSSetViewports( 1, &vp );
+	//// Setup the viewport - defines which part of the back-buffer we will render to (usually all of it)
+	//D3D10_VIEWPORT vp;
+	//vp.Width  = ViewportWidth;
+	//vp.Height = ViewportHeight;
+	//vp.MinDepth = 0.0f;
+	//vp.MaxDepth = 1.0f;
+	//vp.TopLeftX = 0;
+	//vp.TopLeftY = 0;
+	//g_pd3dDevice->RSSetViewports( 1, &vp );
 
-	// Select the back buffer and depth buffer to use for rendering
-	g_pd3dDevice->OMSetRenderTargets( 1, &BackBufferRenderTarget, DepthStencilView );
+	//// Select the back buffer and depth buffer to use for rendering
+	//g_pd3dDevice->OMSetRenderTargets( 1, &BackBufferRenderTarget, DepthStencilView );
 	
 	// Clear previous frame from back buffer and depth buffer
 	g_pd3dDevice->ClearRenderTargetView( BackBufferRenderTarget, &AmbientLight.r );
 	g_pd3dDevice->ClearDepthStencilView( DepthStencilView, D3D10_CLEAR_DEPTH, 1.0f, 0 );
 
 	// Update camera aspect ratio based on viewport size - for better results when changing window size
-	MainCamera->SetAspect( static_cast<TFloat32>(ViewportWidth) / ViewportHeight );
+	m_MainCamera->SetAspect( static_cast<TFloat32>(ViewportWidth) / ViewportHeight );
 
 	// Set camera and light data in shaders
-	MainCamera->CalculateMatrices();
-	SetCamera(MainCamera);
+	m_MainCamera->CalculateMatrices();
+	SetCamera(m_MainCamera);
 	SetAmbientLight(AmbientLight);
 	SetLights(&Lights[0]);
 
 	// Render entities and draw on-screen text
 	EntityManager.RenderAllEntities();
 	RenderSceneText( updateTime );
+	particalSystem.Render(updateTime);
 
     // Present the backbuffer contents to the display
 	SwapChain->Present( 0, 0 );
@@ -257,7 +260,7 @@ void RenderSceneText( float updateTime )
 	TInt32 X, Y = 0;
 	while (entity != 0)
 	{
-		if (MainCamera->PixelFromWorldPt(entity->Position(), ViewportWidth, ViewportHeight, &X, &Y))
+		if (m_MainCamera->PixelFromWorldPt(entity->Position(), ViewportWidth, ViewportHeight, &X, &Y))
 		{
 			CVector2 entityPixel = CVector2((float)X, (float)Y);
 			CVector2 mousePixel = CVector2((float)MouseX, (float)MouseY);
@@ -288,7 +291,7 @@ void ShowTankInfo(stringstream& outText)
 			CVector3 entityPosition = tankEntity->Position();
 			TInt32 X = 0, Y = 0;
 
-			if (MainCamera->PixelFromWorldPt(entityPosition, ViewportWidth, ViewportHeight, &X, &Y))
+			if (m_MainCamera->PixelFromWorldPt(entityPosition, ViewportWidth, ViewportHeight, &X, &Y))
 			{
 				string tankEntityName = tankEntity->GetName().c_str();
 				string tankEntityState = tankEntity->GetState().c_str();
@@ -354,16 +357,17 @@ void UpdateScene( float updateTime )
 {
 	// Call all entity update functions
 	EntityManager.UpdateAllEntities( updateTime );
-
+	particalSystem.Update(updateTime);
 	// Set camera speeds
 	// Key F1 used for full screen toggle
 	if (KeyHit(Key_F2)) CameraMoveSpeed = 5.0f;
 	if (KeyHit(Key_F3)) CameraMoveSpeed = 40.0f;
+	if (KeyHit(Key_F4)) particalSystem.ResetParticles();
 
-	if (MainCamera == FreeMovingCamera)
+	if (m_MainCamera == FreeMovingCamera)
 	{
 		// Move the camera
-		MainCamera->Control( Key_Up, Key_Down, Key_Left, Key_Right, Key_W, Key_S, Key_A, Key_D, CameraMoveSpeed * updateTime, CameraRotSpeed * updateTime );
+		m_MainCamera->Control( Key_Up, Key_Down, Key_Left, Key_Right, Key_W, Key_S, Key_A, Key_D, CameraMoveSpeed * updateTime, CameraRotSpeed * updateTime );
 	}
 
 	// Toggle show extended information
@@ -411,20 +415,20 @@ void UpdateScene( float updateTime )
 	if (KeyHit(Key_X))
 	{
 		CurrentChaseCameraIndex = CurrentChaseCameraIndex == tankEntities.size() - 1 ? CurrentChaseCameraIndex = 0 : CurrentChaseCameraIndex += 1;
-		MainCamera = tankEntities[CurrentChaseCameraIndex]->GetChaseCamera();
+		m_MainCamera = tankEntities[CurrentChaseCameraIndex]->GetChaseCamera();
 	}
 
 	// Go through all the tanks chase cameras in an descending order (tankn -> tank1 -> tank0)
 	if (KeyHit(Key_Z))
 	{
 		CurrentChaseCameraIndex = CurrentChaseCameraIndex == 0 ? CurrentChaseCameraIndex = tankEntities.size() - 1 : CurrentChaseCameraIndex -= 1;
-		MainCamera = tankEntities[CurrentChaseCameraIndex]->GetChaseCamera();
+		m_MainCamera = tankEntities[CurrentChaseCameraIndex]->GetChaseCamera();
 	}
 
 	// Switch back to the free moving camera
 	if (KeyHit(Key_C))
 	{
-		MainCamera = FreeMovingCamera;
+		m_MainCamera = FreeMovingCamera;
 	}
 
 	// Camera picking (Tank enters evade state)
@@ -463,7 +467,7 @@ void UpdateScene( float updateTime )
 		{
 			if (selectedTankEntity->CanEnterEvadeState())
 			{
-				CVector3 mouseWorld = MainCamera->WorldPtFromPixel(MouseX, MouseY, ViewportWidth, ViewportHeight);
+				CVector3 mouseWorld = m_MainCamera->WorldPtFromPixel(MouseX, MouseY, ViewportWidth, ViewportHeight);
 				selectedTankEntity->SetTargetPoint(CVector3(mouseWorld.x, selectedTankEntity->Position().y, mouseWorld.z), true);
 
 				SMessage msg;

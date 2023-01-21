@@ -7,28 +7,16 @@
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\BasicTransform_vs.cso</FullPath>
+      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\DX10ParticlesDraw.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\ParticlePassThru_vs.cso</FullPath>
+      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\DX10ParticlesUpdate.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\ParticleRender_gs.cso</FullPath>
+      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\PassThruGS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\ParticleUpdate_gs.cso</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\PixelLighting_ps.cso</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\PixelLighting_vs.cso</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TintedTexture_ps.cso</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\WorldTransformOnly_vs.cso</FullPath>
+      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TexOnly.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

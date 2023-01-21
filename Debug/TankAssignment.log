@@ -1,12 +1,4 @@
-﻿  ParseLevel.cpp
-  RayCast.cpp
-  AmmoCrateEntity.cpp
-  EntityManager.cpp
-  HealthCrateEntity.cpp
-  MineEntity.cpp
-  ShellEntity.cpp
-  TankEntity.cpp
-  TankAssignment.cpp
-  Generating Code...
-D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\Source\Scene\EntityManager.h(220): warning C4715: 'gen::CEntityManager::GetTanksShell': not all control paths return a value
+﻿  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\DX10ParticlesUpdate.cso
+  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\PassThruGS.cso
+  compilation object save succeeded; see D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TexOnly.cso
   TankAssignment.vcxproj -> D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TankAssignment.exe
