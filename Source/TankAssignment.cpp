@@ -23,6 +23,10 @@ using namespace std;
 #include "ParseLevel.h"
 #include "CParticleSystem.h"
 
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx10.h"
+
 namespace gen
 {
 
@@ -177,6 +181,14 @@ TEntityUID GetTankUID(int team)
 // Draw one frame of the scene
 void RenderScene( float updateTime )
 {
+	//IMGUI
+	//*******************************
+	// Prepare ImGUI for this frame
+	//*******************************
+	ImGui_ImplDX10_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
 	//// Setup the viewport - defines which part of the back-buffer we will render to (usually all of it)
 	//D3D10_VIEWPORT vp;
 	//vp.Width  = ViewportWidth;
@@ -207,6 +219,16 @@ void RenderScene( float updateTime )
 	EntityManager.RenderAllEntities();
 	RenderSceneText( updateTime );
 	particalSystem.Render(updateTime);
+
+	ImGui::ShowDemoWindow();
+	
+	//IMGUI
+	//*******************************
+	// Finalise ImGUI for this frame
+	//*******************************
+	ImGui::Render();
+	//g_pd3dDevice->OMSetRenderTargets(1, &BackBufferRenderTarget, nullptr);
+	ImGui_ImplDX10_RenderDrawData(ImGui::GetDrawData());
 
     // Present the backbuffer contents to the display
 	SwapChain->Present( 0, 0 );
@@ -350,7 +372,6 @@ void ShowTankInfo(stringstream& outText)
 
 	EntityManager.EndEnumEntities();
 }
-
 
 // Update the scene between rendering
 void UpdateScene( float updateTime )

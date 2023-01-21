@@ -13,9 +13,11 @@
 #include "CTimer.h"
 #include "TankAssignment.h"
 
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx10.h"
 namespace gen
 {
-
 
 //--------------------------------------------------------------------------------------
 // DirectX Variables
@@ -165,7 +167,6 @@ bool D3DSetup( HWND hWnd )
 }
 
 
-
 // Reset the Direct3D device to resize window or toggle fullscreen/windowed
 bool ResetDevice( HWND hWnd, bool ToggleFullscreen = false )
 {
@@ -196,8 +197,14 @@ void D3DShutdown()
 //-----------------------------------------------------------------------------
 
 // Window message handler
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); //IMGUI add this line to support the line below
 LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam)) // IMGUI this line passes user input to ImGUI
+	{
+		return true;
+	}
+
     switch( msg )
     {
         case WM_DESTROY:
@@ -282,7 +289,29 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
     // Initialize Direct3D
 	if (gen::D3DSetup( hWnd ))
     {
-        // Prepare the scene
+
+		//IMGUI
+		//*******************************
+		// Initialise ImGui
+		//*******************************
+
+		// Setup Dear ImGui context
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+
+		// Setup Dear ImGui style
+		ImGui::StyleColorsDark();
+		// ImGui::StyleColorsClassic();
+		// Setup Platform/Renderer bindings
+
+		ImGui_ImplWin32_Init(hWnd);
+		ImGui_ImplDX10_Init(gen::g_pd3dDevice);
+
+		//*******************************
+        
+		// Prepare the scene
         if (gen::SceneSetup())
         {
             // Show the window
@@ -328,6 +357,17 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
         }
 	    gen::SceneShutdown();
     }
+
+	//IMGUI
+	//*******************************
+	// Shutdown ImGui
+	//*******************************
+
+	ImGui_ImplDX10_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+
+	//*******************************
 	gen::D3DShutdown();
 
 	UnregisterClass( "TankAssignment", wc.hInstance );
