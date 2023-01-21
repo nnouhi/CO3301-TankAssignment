@@ -17,7 +17,7 @@
     <EntityTemplate Type="Tank" Name="Oberon MkII" Mesh="HoverTank07.x" MaxSpeed="30.0" Acceleration="2.6" TurnSpeed="1.3" TurretTurnSpeed="0.785" MaxHP="180" ShellDamage="35"/>
 
     <!-- Other Types -->
-    <EntityTemplate Type="Projectile" Name="Shell Type 1" Mesh="Bullet.x"/>
+    <EntityTemplate Type="Projectile" Name="Shell" Mesh="Bullet.x"/>
     <EntityTemplate Type="Ammo" Name="AmmoCrate" Mesh="AmmoCrate.x"/>
     <EntityTemplate Type="Health" Name="HealthCrate" Mesh="HealthCrate.x"/>
     <EntityTemplate Type="Mine" Name="Mine" Mesh="Mine.x"/>
@@ -119,7 +119,27 @@
     <Entity Type="Mine" Name="Mine" RespawnTime="15.0" DamageRadius="10.0" Number="5">
       <Position X="0.0" Y="-10.0" Z ="0.0"/>
     </Entity>
-    
+
+    <!-- Other objects -->
+    <Entity Type="Shell" Name="Projectile A-1" OwnerName="A-1">
+      <Position X="0.0" Y="-10.0" Z ="0.0"/>
+    </Entity>
+    <Entity Type="Shell" Name="Projectile A-2" OwnerName="A-2">
+      <Position X="0.0" Y="-10.0" Z ="0.0"/>
+    </Entity>
+    <Entity Type="Shell" Name="Projectile A-3" OwnerName="A-3">
+      <Position X="0.0" Y="-10.0" Z ="0.0"/>
+    </Entity>
+    <Entity Type="Shell" Name="Projectile B-1" OwnerName="B-1">
+      <Position X="0.0" Y="-10.0" Z ="0.0"/>
+    </Entity>
+    <Entity Type="Shell" Name="Projectile B-2" OwnerName="B-2">
+      <Position X="0.0" Y="-10.0" Z ="0.0"/>
+    </Entity>
+    <Entity Type="Shell" Name="Projectile B-3" OwnerName="B-3">
+      <Position X="0.0" Y="-10.0" Z ="0.0"/>
+    </Entity>
+
   </Entities>
   <!-- End of Scene Setup -->
 

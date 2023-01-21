@@ -32,6 +32,7 @@
 #include "Messenger.h"
 #include "CVector4.h"
 #include "RayCast.h"
+
 #define stringify( name ) #name
 namespace gen
 {
@@ -42,7 +43,6 @@ const TFloat32 TurretTurnSpeedMultiplier = 1.5f;
 const TFloat32 TankTurnSpeedMultiplier = 3.0f;
 const TFloat32 ConeOfVisionWhenPatrolling = 15.0f;
 const TFloat32 StopTurretRotationAngle = 1.0f;
-const TFloat32 BarrelLength = 4.0f;
 const TInt32 AllowedHealthPacksToCollect= 2;
 
 
@@ -102,6 +102,7 @@ CTankEntity::CTankEntity
 	m_CanAskForAssist = true;
 	m_IsCollectingCrate = false;
 	m_TankToAssist = 0;
+	m_Shell = 0;
 	m_ChaseCamera = new CCamera(CVector3(Position().x, Position().y + 3.5f, Position().z));
 	m_ChaseCamera->SetNearFarClip(1.0f, 20000.0f);
 	m_CurrentPatrolPoint = 0;
@@ -220,19 +221,19 @@ void CTankEntity::PatrolBehaviour(TFloat32 updateTime)
 
 void CTankEntity::AimBehaviour(TFloat32 updateTime)
 {
-	CEntity* entity = EntityManager.GetEntity(m_EnemyUID);
+	CEntity* enemyTank = EntityManager.GetEntity(m_EnemyUID);
 	if (m_Timer >= 0.0f)
 	{
 		m_Timer -= updateTime;
-		if (entity != 0)
+		if (enemyTank != 0)
 		{
 			CMatrix4x4 turretWorldMatrix = GetTurretWorldMatrix();
 			CVector3 turretRight = Normalise(turretWorldMatrix.XAxis());
-			CVector3 turretToOtherTank = Normalise(entity->Position() - turretWorldMatrix.Position());
+			CVector3 turretToOtherTank = Normalise(enemyTank->Position() - turretWorldMatrix.Position());
 			bool isRight = Dot(turretRight, turretToOtherTank) > 0.0f ? true : false;
 			
 			// Stop rotating if turret is almost facing enemy tank
-			if (!CheckTurretAngle(StopTurretRotationAngle))
+			if (!CheckTurretAngle(StopTurretRotationAngle, enemyTank))
 			{
 				if (isRight)
 				{
@@ -247,30 +248,23 @@ void CTankEntity::AimBehaviour(TFloat32 updateTime)
 			}
 			else
 			{
-				turretWorldMatrix.FaceDirection(entity->Position());
+				turretWorldMatrix.FaceDirection(enemyTank->Position());
 			}
 		}
 	}
 	else
 	{
 		// Don't bother firing a shell if the distance is long
-		if (Distance(Position(), entity->Position()) < ShellDistance && !ray.RayBoxIntersect(Position(), GetTurretWorldMatrix().ZAxis(), "Building"))
+		if (Distance(Position(), enemyTank->Position()) < ShellDistance && !ray.RayBoxIntersect(Position(), GetTurretWorldMatrix().ZAxis(), "Building"))
 		{
-			string templateName = "Shell Type 1";
-			string name = GetName() + "'s shell";
-			CMatrix4x4 turretWorldMatrix = GetTurretWorldMatrix();
-			CVector3 turretRotation;
-
-			turretWorldMatrix.DecomposeAffineEuler(NULL, &turretRotation, NULL);
-			TEntityUID shellUID = EntityManager.CreateShell(templateName, name, turretWorldMatrix.Position() + turretWorldMatrix.ZAxis() * BarrelLength, turretRotation);
-			CShellEntity* shellEntity = static_cast<CShellEntity*>(EntityManager.GetEntity(shellUID));
-			if (shellEntity != 0)
+			if (m_Shell == 0)
 			{
-				shellEntity->SetOwner(this);
-				m_ShellsAvailable--;
-				m_ShellsFired++;
-
+				m_Shell = EntityManager.GetTanksShell(this);
 			}
+
+			m_Shell->FireShell(enemyTank);
+			m_ShellsAvailable--;
+			m_ShellsFired++;
 
 			// If tank has sufficient ammo continue to evade state, else refill ammo (if possible)
 			bool hasSufficientAmmo = (m_ShellCapacity / 2 >= m_ShellsAvailable) ? false : true;
@@ -471,76 +465,49 @@ void CTankEntity::RotateTurret(TFloat32 amount, TFloat32 updateTime)
 bool CTankEntity::CheckTurretAngle(TFloat32 degreesBeforeAim, TEntityUID &enemyUID)
 {
 	CMatrix4x4 turretWorldMatrix = GetTurretWorldMatrix();
-	EntityManager.BeginEnumEntities("", "", "Tank");
-	CEntity* entity = EntityManager.EnumEntity();
-	
-	// Go through each of the tanks to check if they are within tank's fire angle
-	while (entity != 0)
+	vector<CTankEntity*> enemyTanks = EntityManager.GetEnemyTeamTanks(GetTeam());
+	for each (CTankEntity * enemyTank in enemyTanks)
 	{
-		CTankEntity* tankEntity = static_cast<CTankEntity*>(entity);
-		if (tankEntity != 0)
+		// Don't bother aiming if the distance is long
+		TFloat32 distance = Distance(Position(), enemyTank->Position());
+		if (distance < ShellDistance && !ray.RayBoxIntersect(Position(), GetTurretWorldMatrix().ZAxis(), "Building"))
 		{
-			// Ignore this tank & tank's of ally team, ignore tanks that are destructing as well
-			if (tankEntity->GetUID() != GetUID() && tankEntity->GetTeam() != GetTeam() && tankEntity->GetAliveStatus())
+			// Find angle between 2 vectors: cosθ= u⋅v / ||u|| ||v||
+			CVector3 turretFacing = Normalise(turretWorldMatrix.ZAxis());
+			CVector3 turretToOtherTank = Normalise(enemyTank->Position() - Position());
+			TFloat32 rotationOnTarget = Dot(turretFacing, turretToOtherTank);
+			TFloat32 rotationOnTargetDeg = ToDegrees(acos(rotationOnTarget));
+			if (rotationOnTargetDeg < degreesBeforeAim)
 			{
-				// Don't bother aiming if the distance is long
-				TFloat32 distance = Distance(Position(), entity->Position());
-				if (distance < ShellDistance && !ray.RayBoxIntersect(Position(), GetTurretWorldMatrix().ZAxis(), "Building"))
-				{
-					// Find angle between 2 vectors: cosθ= u⋅v / ||u|| ||v||
-					CVector3 turretFacing = Normalise(turretWorldMatrix.ZAxis());
-					CVector3 turretToOtherTank = Normalise(tankEntity->Position() - Position());
-					TFloat32 rotationOnTarget = Dot(turretFacing, turretToOtherTank);
-					TFloat32 rotationOnTargetDeg = ToDegrees(acos(rotationOnTarget));
-					if (rotationOnTargetDeg < degreesBeforeAim)
-					{
-						enemyUID = entity->GetUID();
-						return true;
-					}
-					else
-					{
-						enemyUID = -1;
-					}
-				}
+				enemyUID = enemyTank->GetUID();
+				return true;
+			}
+			else
+			{
+				enemyUID = -1;
 			}
 		}
-		entity = EntityManager.EnumEntity();
 	}
-	EntityManager.EndEnumEntities();
+			
 	enemyUID = -1;
 	return false;
 }
 
-bool CTankEntity::CheckTurretAngle(TFloat32 degreesBeforeAim)
+bool CTankEntity::CheckTurretAngle(TFloat32 degreesBeforeAim, CEntity* enemyTank)
 {
 	CMatrix4x4 turretWorldMatrix = GetTurretWorldMatrix();
-	EntityManager.BeginEnumEntities("", "", "Tank");
-	CEntity* entity = EntityManager.EnumEntity();
-
-	// Go through each of the tanks to check if they are within tank's fire angle
-	while (entity != 0)
-	{
-		CTankEntity* tankEntity = static_cast<CTankEntity*>(entity);
-		if (tankEntity != 0)
-		{
-			// Ignore this tank & tank's of ally team
-			if (tankEntity->GetUID() != GetUID() && tankEntity->GetTeam() != GetTeam())
-			{
-				// Find angle between 2 vectors: cosθ= u⋅v / ||u|| ||v||
-				CVector3 turretFacing = Normalise(turretWorldMatrix.ZAxis());
-				CVector3 turretToOtherTank = Normalise(tankEntity->Position() - Position());
-				TFloat32 rotationOnTarget = Dot(turretFacing, turretToOtherTank);
-				TFloat32 rotationOnTargetDeg = ToDegrees(acos(rotationOnTarget));
+	
+	// Find angle between 2 vectors: cosθ= u⋅v / ||u|| ||v||
+	CVector3 turretFacing = Normalise(turretWorldMatrix.ZAxis());
+	CVector3 turretToOtherTank = Normalise(enemyTank->Position() - Position());
+	TFloat32 rotationOnTarget = Dot(turretFacing, turretToOtherTank);
+	TFloat32 rotationOnTargetDeg = ToDegrees(acos(rotationOnTarget));
 				
-				if (rotationOnTargetDeg <= degreesBeforeAim)
-				{
-					return true;
-				}
-			}
-		}
-		entity = EntityManager.EnumEntity();
-	}
-	EntityManager.EndEnumEntities();
+	if (rotationOnTargetDeg <= degreesBeforeAim)
+	{
+		return true;
+	}	
+	
 	return false;
 }
 
@@ -548,27 +515,16 @@ void CTankEntity::FindClosestCrate(string crateType)
 {
 	TFloat32 closestDistanceCrate = D3D10_FLOAT32_MAX;
 	CCRateEntity* closestCrateEntity = 0;
-	EntityManager.BeginEnumEntities("", "", crateType);
-	CEntity* entity = EntityManager.EnumEntity();
-	while (entity != 0)
+	vector<CCRateEntity*> crateEntities = EntityManager.GetCrateEntities(crateType);
+	for each (CCRateEntity* crateEntity in crateEntities)
 	{
-		CCRateEntity* crateEntity = static_cast<CCRateEntity*>(entity);
-
-		if (crateEntity != 0)
+		TFloat32 distance = Distance(crateEntity->Position(), Position());
+		if (distance < closestDistanceCrate)
 		{
-			if (crateEntity->IsAlive() && !crateEntity->GetTargeted())
-			{
-				TFloat32 distance = Distance(entity->Position(), Position());
-				if (distance < closestDistanceCrate)
-				{
-					closestCrateEntity = crateEntity;
-					closestDistanceCrate = distance;
-				}
-			}
-		}
-		entity = EntityManager.EnumEntity();
+			closestCrateEntity = crateEntity;
+			closestDistanceCrate = distance;
+		}	
 	}
-	EntityManager.EndEnumEntities();
 
 	if (closestCrateEntity != 0)
 	{
@@ -654,11 +610,11 @@ void CTankEntity::OnHit(TInt32 damageToApply)
 			if (m_CanAskForAssist)
 			{
 				// Send a 'help' message to the nearest teammate
-				vector<CEntity*> friendlyTanks = EntityManager.GetTeamTanks(GetTeam(), this);
-				CEntity* assistingTank = 0;
+				vector<CTankEntity*> friendlyTanks = EntityManager.GetTeamTanks(GetTeam(), this);
+				CTankEntity* assistingTank = 0;
 				TFloat32 distance = 0.0f;
 				TFloat32 nearestDistance = D3D10_FLOAT32_MAX;
-				for each (CEntity * tank in friendlyTanks)
+				for each (CTankEntity * tank in friendlyTanks)
 				{
 					distance = Distance(Position(), tank->Position());
 					if (distance < nearestDistance)

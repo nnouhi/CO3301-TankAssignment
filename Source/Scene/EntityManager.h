@@ -101,6 +101,7 @@ public:
 	TEntityUID CreateShell
 	(
 		const string&   templateName,
+		CTankEntity* owner,
 		const string&   name = "",
 		const CVector3& position = CVector3::kOrigin,
 		const CVector3& rotation = CVector3(0.0f, 0.0f, 0.0f),
@@ -199,6 +200,25 @@ public:
 		return 0;
 	}
 
+	CShellEntity* GetTanksShell(CTankEntity* owner)
+	{
+		BeginEnumEntities("", "", "Projectile");
+		CEntity* entity = EnumEntity();
+		while (entity != 0)
+		{
+			CShellEntity* shellEntity = static_cast<CShellEntity*>(entity);
+			if (shellEntity != 0)
+			{
+				if (shellEntity->GetOwner() == owner)
+				{
+					return shellEntity;
+				}
+			}
+			entity = EnumEntity();
+		}
+		EndEnumEntities();
+	}
+
 	const vector<CTankEntity*> GetTankEntities() 
 	{
 		vector<CTankEntity*> tankEntities;
@@ -218,43 +238,62 @@ public:
 		return tankEntities;
 	}
 
-	const vector<CEntity*> GetEnemyTeamTanks(int team) 
+	const vector<CTankEntity*> GetTankEntities(CEntity* entityToExclude)
 	{
-		vector<CEntity*> entities;
+		vector<CTankEntity*> tankEntities;
+		BeginEnumEntities("", "", "Tank");
+		CEntity* entity = EnumEntity();
+
+		while (entity != 0)
+		{
+			CTankEntity* tankEntity = static_cast<CTankEntity*>(entity);
+			if (tankEntity != 0 && entity != entityToExclude)
+			{
+				tankEntities.push_back(tankEntity);
+			}
+			entity = EnumEntity();
+		}
+		EndEnumEntities();
+		return tankEntities;
+	}
+
+	const vector<CTankEntity*> GetEnemyTeamTanks(TInt32 team)
+	{
+		vector<CTankEntity*> entities;
 		CEntity* entity;
 		BeginEnumEntities("", "", "Tank"); 
 		while ((entity = EnumEntity()) != 0)
 		{
 			CTankEntity* tankEntity = reinterpret_cast<CTankEntity*>(entity);
-			if (tankEntity->GetTeam() != team)
+			if (tankEntity->GetTeam() != team && tankEntity->GetAliveStatus())
 			{
-				entities.push_back(entity);
+				entities.push_back(tankEntity);
 			}
 		}
 		EndEnumEntities();
 		return entities;
 	}
 
-	const vector<CEntity*> GetTeamTanks(int team)
+	const vector<CTankEntity*> GetTeamTanks(TInt32 team)
 	{
-		vector<CEntity*> entities;
+		vector<CTankEntity*> entities;
 		CEntity* entity;
 		BeginEnumEntities("", "", "Tank"); 
 		while ((entity = EnumEntity()) != 0)
 		{
 			CTankEntity* tankEntity = reinterpret_cast<CTankEntity*>(entity);
-			if (tankEntity->GetTeam() == team)
+			if (tankEntity->GetTeam() == team && tankEntity->GetAliveStatus())
 			{
-				entities.push_back(entity);
+				entities.push_back(tankEntity);
 			}
 		}
 		EndEnumEntities();
 		return entities;
 	}
 
-	const vector<CEntity*> GetTeamTanks(int team, CEntity* entityToExclude)
+	const vector<CTankEntity*> GetTeamTanks(int team, CEntity* entityToExclude)
 	{
-		vector<CEntity*> entities;
+		vector<CTankEntity*> entities;
 		CEntity* entity;
 		BeginEnumEntities("", "", "Tank");
 		while ((entity = EnumEntity()) != 0)
@@ -262,11 +301,28 @@ public:
 			CTankEntity* tankEntity = reinterpret_cast<CTankEntity*>(entity);
 			if (tankEntity->GetTeam() == team && tankEntity != entityToExclude)
 			{
-				entities.push_back(entity);
+				entities.push_back(tankEntity);
 			}
 		}
 		EndEnumEntities();
 		return entities;
+	}
+
+	const vector<CCRateEntity*> GetCrateEntities(string crateType)
+	{
+		vector<CCRateEntity*> crates;
+		CEntity* entity;
+		BeginEnumEntities("", "", crateType);
+		while ((entity = EnumEntity()) != 0)
+		{
+			CCRateEntity* crateEntity = reinterpret_cast<CCRateEntity*>(entity);
+			if (crateEntity->IsAlive() && !crateEntity->GetTargeted())
+			{
+				crates.push_back(crateEntity);
+			}
+		}
+		EndEnumEntities();
+		return crates;
 	}
 
 	const TInt32 GetAmmoCrateCount()
@@ -295,7 +351,7 @@ public:
 		return healthCrateCount;
 	}
 
-	CEntity* GetBuilding()
+	const CEntity* GetBuilding()
 	{
 		CEntity* entity;
 		BeginEnumEntities("", "", "Building"); // Enumerate entities with ship templates

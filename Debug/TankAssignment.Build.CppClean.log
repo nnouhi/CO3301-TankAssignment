@@ -1,46 +1,66 @@
-d:\year 4 computing\games development 2\assignment\tank - test\debug\vc143.pdb
-d:\year 4 computing\games development 2\assignment\tank - test\debug\vc143.idb
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cimportxfile.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\rendermethod.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\mesh.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\utility.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\msdefines.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\ctimer.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\chashtable.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cfatalexception.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\messenger.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\light.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\healthcrateentity.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\entitymanager.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\entity.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\crateentity.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\mineentity.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\camera.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\ammocrateentity.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\raycast.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tinyxml2.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\parselevel.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\mainapp.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\mathio.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cvector4.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cvector3.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cvector2.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cquattransform.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cquaternion.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cmatrix4x4.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cmatrix3x3.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\cmatrix2x2.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\basemath.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\input.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tankassignment.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tankentity.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\shellentity.obj
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tankassignment.ilk
-d:\year 4 computing\games development 2\assignment\tank - test\tankassignment.exe
-d:\year 4 computing\games development 2\assignment\tank - test\tankassignment.pdb
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tankassignment.tlog\cl.command.1.tlog
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tankassignment.tlog\cl.read.1.tlog
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tankassignment.tlog\cl.write.1.tlog
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tankassignment.tlog\link.command.1.tlog
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tankassignment.tlog\link.read.1.tlog
-d:\year 4 computing\games development 2\assignment\tank - test\debug\tankassignment.tlog\link.write.1.tlog
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\vc143.pdb
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\vc143.idb
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cimportxfile.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\rendermethod.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\mesh.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\utility.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\msdefines.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\ctimer.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\chashtable.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cfatalexception.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\messenger.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\light.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\healthcrateentity.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\entitymanager.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\entity.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\crateentity.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\mineentity.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\camera.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\ammocrateentity.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\raycast.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tinyxml2.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\parselevel.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\mainapp.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\mathio.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cvector4.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cvector3.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cvector2.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cquattransform.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cquaternion.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cmatrix4x4.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cmatrix3x3.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cmatrix2x2.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\basemath.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\input.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankentity.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\shellentity.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\shader.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\cparticlesystem.obj
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\basictransform_vs.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\particlepassthru_vs.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\particlerender_gs.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\particleupdate_gs.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\pixellighting_ps.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\pixellighting_vs.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\tintedtexture_ps.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\worldtransformonly_vs.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\dx10particlesdraw.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\dx10particlesupdate.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\passthrugs.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\pixellittex.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\plaincolour.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\texonly.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\xformonly.cso
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\tankassignment.exe
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.ilk
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\tankassignment.pdb
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.tlog\cl.command.1.tlog
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.tlog\cl.read.1.tlog
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.tlog\cl.write.1.tlog
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.tlog\fxc.command.1.tlog
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.tlog\fxc.read.1.tlog
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.tlog\fxc.write.1.tlog
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.tlog\link.command.1.tlog
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.tlog\link.read.1.tlog
+d:\year 4 computing\games development 2\assignment\co3301-tankassignment\debug\tankassignment.tlog\link.write.1.tlog

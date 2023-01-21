@@ -226,6 +226,19 @@ namespace gen
 						m_EntityManager->CreateMine(type, respawnTime, damageRadius, 
 							name, pos, rot, scale);
 					}
+					else if (templateType == "Projectile")
+					{
+						attr = element->FindAttribute("OwnerName");
+						if (attr == nullptr)  return false;
+						string ownerName= attr->Value();
+
+						CEntity* owner = m_EntityManager->GetEntity(ownerName);
+						if (owner != 0)
+						{
+							CTankEntity* ownerTank = static_cast<CTankEntity*>(owner);
+							m_EntityManager->CreateShell(type, ownerTank, name, pos, rot, scale);
+						}
+					}
 					else
 					{
 						m_EntityManager->CreateEntity(type, name, pos, rot, scale);

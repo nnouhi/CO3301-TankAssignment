@@ -13,6 +13,7 @@ using namespace std;
 #include "CVector3.h"
 #include "Entity.h"
 
+
 namespace gen
 {
 
@@ -98,6 +99,7 @@ private:
 // The shell code performs very limited behaviour to be rewritten as one of the assignment
 // requirements. You may wish to alter other parts of the class to suit your game additions
 // E.g extra member variables, constructor parameters, getters etc.
+class CShellEntity; // Had some linking issues with header files
 class CTankEntity : public CEntity
 {
 /////////////////////////////////////
@@ -239,6 +241,7 @@ private:
 	TEntityUID m_EnemyUID;
 	CCamera* m_ChaseCamera;
 	CEntity* m_TankToAssist;
+	CShellEntity* m_Shell;
 	bool m_ControlledByPlayer;
 	bool m_ShouldDestroy;
 	bool m_CanAskForAssist;
@@ -265,7 +268,7 @@ private:
 
 	bool CheckTurretAngle(TFloat32 degreesBeforeAim, TEntityUID &enemyUID);
 
-	bool CheckTurretAngle(TFloat32 degreesBeforeAim);
+	bool CheckTurretAngle(TFloat32 degreesBeforeAim, CEntity* enemyTank);
 
 	void UpdateState(EState newState);
 

@@ -34,6 +34,19 @@ CCamera::CCamera( const CVector3& position /*= CVector3::kOrigin*/,
 // Camera matrix functions
 //-----------------------------------------------------------------------------
 
+D3DXMATRIXA16 CCamera::GetViewD3DXMatrix()
+{
+	CalculateMatrices();
+	return ToD3DXMATRIX(m_MatView);
+
+}
+
+D3DXMATRIXA16 CCamera::GetViewProjectionD3DXMatrix()
+{
+	CalculateMatrices();
+	return ToD3DXMATRIX(m_MatViewProj);
+}
+
 // Sets up the view and projection transform matrices for the camera
 void CCamera::CalculateMatrices()
 {

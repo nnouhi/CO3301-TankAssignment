@@ -10,6 +10,9 @@
 	Change history:
 		V1.0    Created 23/09/05 - LN
 **************************************************************************************************/
+#include <Windows.h>
+#include <d3d10.h>  // Added directx headerfiles for shaders
+#include <d3dx10.h> // --"-
 
 #ifndef GEN_DEFINES_H_INCLUDED
 #define GEN_DEFINES_H_INCLUDED
@@ -98,6 +101,25 @@ inline const char* ClassName() { return ""; }
 inline const char* ObjectName() { return ""; }
 inline void SetObjectName( const char* ) {}
 
+//-----------------------------------------------------------------------------
+// Global variables
+//-----------------------------------------------------------------------------
+
+// Make DirectX render device available to other source files. We declare this
+// variable global in one file, then make it "extern" to all others. In general
+// this is not good practice - this is a kind of super-global variable. Would
+// be better to have a Device class responsible for this data. However, this
+// example aims for a minimum of code to help demonstrate the focus topic
+// Added for shaders
+extern ID3D10Device* g_pd3dDevice;
+extern IDXGISwapChain* SwapChain;
+
+//-----------------------------------------------------------------------------
+// Helper functions and macros
+//-----------------------------------------------------------------------------
+
+// Helper macro to release DirectX pointers only if they are not NULL
+#define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p) = NULL; } }
 
 } // namespace gen
 

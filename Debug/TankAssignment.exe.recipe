@@ -5,7 +5,20 @@
       <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TankAssignment.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
-  <ContentFiles />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\DX10ParticlesDraw.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\DX10ParticlesUpdate.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\PassThruGS.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TexOnly.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />
 </Project>
