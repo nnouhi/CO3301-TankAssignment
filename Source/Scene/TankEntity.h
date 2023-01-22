@@ -196,12 +196,10 @@ public:
 
 	void SetPatrolPoints(vector<CVector3> patrolPoints) { m_PatrolPoints = patrolPoints; }
 
+
 /////////////////////////////////////
 //	Private interface
 private:
-
-	/////////////////////////////////////
-	// Types
 
 	// States available for a tank - placeholders for shell code
 	enum EState
@@ -246,6 +244,7 @@ private:
 	bool m_ShouldDestroy;
 	bool m_CanAskForAssist;
 	bool m_IsCollectingCrate;
+
 	// State behaviour methods
 	void PatrolBehaviour(TFloat32 updateTime);
 
@@ -260,6 +259,25 @@ private:
 	void AssistBehaviour(TFloat32 updateTime);
 
 	// State behaviour helper method
+	void UpdateState(EState newState);
+
+	const string GetState(EState state)
+	{
+		switch (state)
+		{
+		case Inactive: return "Inactive"; break;
+		case Patrol: return "Patrol"; break;
+		case Aim: return "Aim"; break;
+		case Evade: return "Evade"; break;
+		case FindAmmo: return "FindAmmo"; break;
+		case FindHealth: return "FindHealth"; break;
+		case Assist: return "Assist"; break;
+		case Destruct: return "Destruct"; break;
+		}
+
+		return "Unknown";
+	}
+
 	bool MoveTank(TFloat32 updateTime, TFloat32 rotatingSpeed);
 
 	void RotateTurretToTarget(TFloat32 updateTime);
@@ -270,8 +288,6 @@ private:
 
 	bool CheckTurretAngle(TFloat32 degreesBeforeAim, CEntity* enemyTank);
 
-	void UpdateState(EState newState);
-
 	void FindClosestCrate(string crateType);
 
 	void UpdateChaseCamera();
@@ -279,23 +295,6 @@ private:
 	bool IsAliveAfterHit(TInt32 damageToApply);
 
 	void OnHit(TInt32 damageToApply);
-
-	const string GetState(EState state)
-	{
-		switch (state)
-		{
-			case Inactive: return "Inactive"; break;
-			case Patrol: return "Patrol"; break;
-			case Aim: return "Aim"; break;
-			case Evade: return "Evade"; break;
-			case FindAmmo: return "FindAmmo"; break;
-			case FindHealth: return "FindHealth"; break;
-			case Assist: return "Assist"; break;
-			case Destruct: return "Destruct"; break;
-		}
-
-		return "Unknown";
-	}
 };
 
 

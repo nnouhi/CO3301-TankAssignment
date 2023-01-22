@@ -8,7 +8,6 @@
 
 namespace gen
 {
-
 ///////////////////////////////
 // Scene management
 
@@ -31,5 +30,8 @@ void ShowTankInfo(stringstream& outText);
 
 // Update the scene between rendering
 void UpdateScene( float updateTime );
+
+void TankManagerGUI(bool* p_open = NULL);
+
 
 } // namespace gen

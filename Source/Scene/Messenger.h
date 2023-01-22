@@ -25,6 +25,7 @@ enum EMessageType
 	Msg_Stop,
 	Msg_Hit,
 	Msg_Evade,
+	Msg_Patrol,
 	Msg_Help
 };
 
