@@ -348,10 +348,11 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 					}
 
 					// Quit on escape
-					if (gen::KeyHit( gen::Key_Escape ))
+					if (gen::KeyHit( gen::Key_Escape ) || gen::ExitGame())
 					{
 						DestroyWindow( hWnd );
 					}
+
 				}
             }
         }

@@ -291,7 +291,7 @@ public:
 		return entities;
 	}
 
-	const vector<CTankEntity*> GetTeamTanks(int team, CEntity* entityToExclude)
+	const vector<CTankEntity*> GetTeamTanks(TInt32 team, CEntity* entityToExclude)
 	{
 		vector<CTankEntity*> entities;
 		CEntity* entity;
@@ -362,6 +362,19 @@ public:
 		}
 		
 		
+	}
+
+	const TInt32 GetTeamCount(TInt32 team)
+	{
+		return GetTeamTanks(team).size();
+	}
+	const bool GetWinningTeam(string &winningTeam)
+	{
+		TInt32 teamACount = GetTeamCount(0);
+		TInt32 teamBCount = GetTeamCount(1);
+		bool haveWinner = !(teamACount > 0 && teamBCount > 0);
+		winningTeam = (haveWinner) ? (teamACount > 0) ? "Team A" : "Team B" : "";
+		return haveWinner;
 	}
 
 

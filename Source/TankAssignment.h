@@ -33,5 +33,6 @@ void UpdateScene( float updateTime );
 
 void TankManagerGUI(bool* p_open = NULL);
 
+bool ExitGame();
 
 } // namespace gen

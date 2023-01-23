@@ -109,7 +109,8 @@ float AverageUpdateTime = -1.0f; // Invalid value at first
 
 bool ShowExtendedInformation = false;
 TInt32 CurrentChaseCameraIndex = 0;
-
+bool ShouldExitGame = false;
+TFloat32 TimeToExitGame = 5.0f;
 //-----------------------------------------------------------------------------
 // Game Helper functions
 //-----------------------------------------------------------------------------
@@ -119,6 +120,8 @@ TEntityUID GetTankUID(int team)
 {
 	return (team == 0) ? tanks[0] : tanks[1];
 }
+
+bool ExitGame() { return ShouldExitGame; }
 
 void UpdateMainCamera(CCamera* camera) { m_MainCamera = camera; SetCamera(m_MainCamera); }
 
@@ -278,23 +281,47 @@ void RenderSceneText( float updateTime )
 
 	// Write FPS text string
 	stringstream outText;
+	string winningTeam = "";
 	if (AverageUpdateTime >= 0.0f)
 	{
-		outText << "Frame Time: " << updateTime * 1000.0f << "ms" << endl
+		if (!EntityManager.GetWinningTeam(winningTeam))
+		{
+			outText << "Frame Time: " << updateTime * 1000.0f << "ms" << endl
 				<< "FPS:" << 1.0f / updateTime << endl;
-		RenderText(outText.str(), 0, 0, 1.0f, 1.0f, 0.0f);
+			RenderText(outText.str(), 0, 0, 1.0f, 1.0f, 0.0f);
+		}
+		else
+		{
+			TimeToExitGame -= updateTime;
+			outText << winningTeam << " WAS VICTORIOUS!" << endl;
+			RenderText(outText.str(), ViewportWidth / 2, ViewportHeight / 2, 1.0f, 1.0f, 0.0f);
+			SMessage msg;
+			msg.from = SystemUID;
+			msg.type = Msg_Stop;
+			for each (CTankEntity* tankEntity in tankEntities)
+			{
+				// In case a tank is destructing do not send a message because its gonna crash
+				if (tankEntity->GetState() != "Destruct")
+				{
+					Messenger.SendMessage(tankEntity->GetUID(), msg);
+				}
+			}
+
+			if (TimeToExitGame < 0.0f)
+			{
+				ShouldExitGame = true;
+			}
+		}
 		outText.str("");
 	}
 
 	// Calculate nearest entity  to mouse cursor
 	NearestEntity = 0;
-	TFloat32 nearestDistance = 50;
-	EntityManager.BeginEnumEntities("", "", "Tank");
-	CEntity* entity = EntityManager.EnumEntity();
+	TFloat32 nearestDistance = 50;	
 	TInt32 X, Y = 0;
-	while (entity != 0)
+	for each (CTankEntity * tankEntity in tankEntities)
 	{
-		if (m_MainCamera->PixelFromWorldPt(entity->Position(), ViewportWidth, ViewportHeight, &X, &Y))
+		if (m_MainCamera->PixelFromWorldPt(tankEntity->Position(), ViewportWidth, ViewportHeight, &X, &Y))
 		{
 			CVector2 entityPixel = CVector2((float)X, (float)Y);
 			CVector2 mousePixel = CVector2((float)MouseX, (float)MouseY);
@@ -302,87 +329,75 @@ void RenderSceneText( float updateTime )
 
 			if (pixelDistance < nearestDistance)
 			{
-				NearestEntity = entity;
+				NearestEntity = tankEntity;
 				nearestDistance = pixelDistance;
 			}
 		}
-		entity = EntityManager.EnumEntity();
 	}
-	EntityManager.EndEnumEntities();
-
 	ShowTankInfo(outText);
 }
 
 void ShowTankInfo(stringstream& outText)
 {
-	EntityManager.BeginEnumEntities("", "", "Tank");
-	CEntity* entity = EntityManager.EnumEntity();
-	while (entity != 0)
+	for each (CTankEntity* tankEntity in tankEntities)
 	{
-		CTankEntity* tankEntity = static_cast<CTankEntity*>(entity);
-		if (tankEntity != 0)
+		CVector3 entityPosition = tankEntity->Position();
+		TInt32 X = 0, Y = 0;
+
+		if (m_MainCamera->PixelFromWorldPt(entityPosition, ViewportWidth, ViewportHeight, &X, &Y))
 		{
-			CVector3 entityPosition = tankEntity->Position();
-			TInt32 X = 0, Y = 0;
+			string tankEntityName = tankEntity->GetName().c_str();
+			string tankEntityState = tankEntity->GetState().c_str();
+			TInt32 tankHP = tankEntity->GetHP();
+			TInt32 shellsFired = tankEntity->GetShellsFired();
+			TInt32 shellsAvailable = tankEntity->GetShellsAvailable();
+			string tankIntersects = (ray.RayBoxIntersect(entityPosition, Normalise(tankEntity->GetTurretWorldMatrix().ZAxis()), "Building")) ? "Intersects" : "Not";
 
-			if (m_MainCamera->PixelFromWorldPt(entityPosition, ViewportWidth, ViewportHeight, &X, &Y))
+			// Display extented info
+			if (ShowExtendedInformation)
 			{
-				string tankEntityName = tankEntity->GetName().c_str();
-				string tankEntityState = tankEntity->GetState().c_str();
-				TInt32 tankHP = tankEntity->GetHP();
-				TInt32 shellsFired = tankEntity->GetShellsFired();
-				TInt32 shellsAvailable = tankEntity->GetShellsAvailable();
-				string tankIntersects = (ray.RayBoxIntersect(entityPosition, Normalise(tankEntity->GetTurretWorldMatrix().ZAxis()), "Building")) ? "Intersects" : "Not";
+				outText << "Name: " << tankEntityName << endl
+						<< "State: " << tankEntityState << endl
+						<< "HP: " << tankHP << endl
+						<< "Shells Avilable: " << shellsAvailable << endl
+						<< "Shells Fired: " << shellsFired << endl
+						<< "Hit: " << tankIntersects << endl
+						<< "TargetPoint: " << tankEntity->GetTargetPosition().x << " " << tankEntity->GetTargetPosition().y << " " << tankEntity->GetTargetPosition().z << endl
+						<< "CurrentPosition: " << tankEntity->Position().x << " " << tankEntity->Position().y << " " << tankEntity->Position().z << endl;
 
-				// Display extented info
-				if (ShowExtendedInformation)
+				if (SelectedEntity == tankEntity)
 				{
-					outText << "Name: " << tankEntityName << endl
-							<< "State: " << tankEntityState << endl
-							<< "HP: " << tankHP << endl
-							<< "Shells Avilable: " << shellsAvailable << endl
-							<< "Shells Fired: " << shellsFired << endl
-							<< "Hit: " << tankIntersects << endl
-							<< "TargetPoint: " << tankEntity->GetTargetPosition().x << " " << tankEntity->GetTargetPosition().y << " " << tankEntity->GetTargetPosition().z << endl
-							<< "CurrentPosition: " << tankEntity->Position().x << " " << tankEntity->Position().y << " " << tankEntity->Position().z << endl;
-
-					if (SelectedEntity == entity)
-					{
-						outText << "-SELECTED ENTITY-" << endl
-								<< "Press 'Mouse Left' on the tank again to evade" << endl
-								<< "OR" << endl
-								<< "Press 'Mouse Right' to a random location to move the tank there" << endl;
-					}
+					outText << "-SELECTED ENTITY-" << endl
+							<< "Press 'Mouse Left' on the tank again to evade" << endl
+							<< "OR" << endl
+							<< "Press 'Mouse Right' to a random location to move the tank there" << endl;
 				}
-				else
-				{
-					outText << "Name: " << tankEntityName << endl;
-				}
-
-				CVector3 rgb;
-				if (entity == NearestEntity || entity == SelectedEntity)
-				{
-					// Highlight nearest entity
-					rgb.x = 1.0f;
-					rgb.y = 1.0f;
-					rgb.z = 0.0f;
-				}
-				else
-				{
-					// Display each team with different color
-					rgb.x = 0.0f;
-					rgb.y = tankEntity->GetTeam() == 0 ? 1.0f : 0.0f;
-					rgb.z = tankEntity->GetTeam() == 1 ? 1.0f : 0.0f;
-				}
-
-				RenderText(outText.str(), X, Y, rgb.x, rgb.y, rgb.z);
-				outText.str("");
 			}
-		}
-		entity = EntityManager.EnumEntity();
-	}
+			else
+			{
+				outText << "Name: " << tankEntityName << endl;
+			}
 
-	EntityManager.EndEnumEntities();
+			CVector3 rgb;
+			if (tankEntity == NearestEntity || tankEntity == SelectedEntity)
+			{
+				// Highlight nearest entity
+				rgb.x = 1.0f;
+				rgb.y = 1.0f;
+				rgb.z = 0.0f;
+			}
+			else
+			{
+				// Display each team with different color
+				rgb.x = 0.0f;
+				rgb.y = tankEntity->GetTeam() == 0 ? 1.0f : 0.0f;
+				rgb.z = tankEntity->GetTeam() == 1 ? 1.0f : 0.0f;
+			}
+
+			RenderText(outText.str(), X, Y, rgb.x, rgb.y, rgb.z);
+			outText.str("");
+		}
+	}
 }
 
 // Update the scene between rendering
@@ -391,6 +406,7 @@ void UpdateScene( float updateTime )
 	// Call all entity update functions
 	EntityManager.UpdateAllEntities( updateTime );
 	particleSystem.Update(updateTime);
+
 	// Set camera speeds
 	// Key F1 used for full screen toggle
 	if (KeyHit(Key_F2)) CameraMoveSpeed = 5.0f;
@@ -412,35 +428,25 @@ void UpdateScene( float updateTime )
 	// Start game
 	if (KeyHit(Key_1))
 	{
-		EntityManager.BeginEnumEntities("", "", "Tank");
-		CEntity* entity = EntityManager.EnumEntity();
-		while (entity != 0)
+		SMessage msg;
+		msg.from = SystemUID;
+		msg.type = Msg_Start;
+		for each (CTankEntity* tankEntity in tankEntities)
 		{
-			SMessage msg;
-			msg.from = SystemUID;
-			msg.type = Msg_Start;
-			Messenger.SendMessage(entity->GetUID(), msg);
-
-			entity = EntityManager.EnumEntity();
+			Messenger.SendMessage(tankEntity->GetUID(), msg);
 		}
-		EntityManager.EndEnumEntities();
 	}
 
 	// Stop game
 	if (KeyHit(Key_2))
 	{
-		EntityManager.BeginEnumEntities("", "", "Tank");
-		CEntity* entity = EntityManager.EnumEntity();
-		while (entity != 0)
+		SMessage msg;
+		msg.from = SystemUID;
+		msg.type = Msg_Stop;
+		for each (CTankEntity* tankEntity in tankEntities)
 		{
-			SMessage msg;
-			msg.from = SystemUID;
-			msg.type = Msg_Stop;
-			Messenger.SendMessage(entity->GetUID(), msg);
-
-			entity = EntityManager.EnumEntity();
+			Messenger.SendMessage(tankEntity->GetUID(), msg);
 		}
-		EntityManager.EndEnumEntities();
 	}
 
 	// Chase camera functionality (NOTE: I am using a 60% keyboard so I don't have a num pad so I replaced it with other keys)
@@ -668,18 +674,20 @@ void TankManagerGUI(bool* p_open)
 		ImGui::Spacing();
 
 		// Create buttons for each alive tank
+		ImGui::Columns(2, "mycolumns"); 
+		ImGui::Text("Team A"); ImGui::NextColumn();
+		ImGui::Text("Team B"); ImGui::NextColumn();
 		static int selectedTank = -1;
 		for (int i = 0; i < tankEntities.size(); i++)
 		{
-			if (i == 0)
+			if (tankEntities[i]->GetTeam() == 1)
 			{
-				ImGui::Text("Team A");
+				if (ImGui::GetColumnIndex() == 0)
+				{
+					ImGui::NextColumn();
+				}
 			}
-			else if (i == tankEntities.size() / 2)
-			{
-				ImGui::Text("Team B");
-			}
-
+			
 			char tankName[100];
 			strcpy(tankName, "Tank: ");
 			strcat(tankName, tankEntities[i]->GetName().c_str());
@@ -687,45 +695,9 @@ void TankManagerGUI(bool* p_open)
 			{
 				selectedTank = i;
 			}
-
-			// If on same team add them in the same line
-			// else change line
-			if (i + 1 != tankEntities.size())
-			{
-				if (tankEntities[i]->GetTeam() == tankEntities[i + 1]->GetTeam())
-				{
-					ImGui::SameLine();			
-				}
-			}
 		}
-
-		// Select tanks - failed code commented
-		/*char* listbox_items[] = 
-		{ 
-			"A-1",
-			"A-2",
-			"A-3",
-
-			"B-1",
-			"B-2",
-			"B-3"
-		};*/
-
-		/*TInt32 numberOfTanks = NumOfTanks;
-		TInt32 charactersPerName = 3;
-
-		char** listbox_items = new char* [numberOfTanks];
-		for (int i = 0; i < numberOfTanks; i++)
-		{
-			listbox_items[i] = new char[charactersPerName];
-			listbox_items[i] = (char*)tankEntities[i]->GetName().c_str();
-		}*/
-		
-		/*char result[100];
-		strcpy(result, "Selected Tank: ");
-		strcat(result, (selectedTank == -1) ? "None." : listbox_items[selectedTank]);
-		ImGui::ListBox(result, &selectedTank, listbox_items, IM_ARRAYSIZE(listbox_items), NumOfTanks);*/
-		// end of Select tanks
+		ImGui::Columns(1);
+		ImGui::Separator();
 
 		// Tank Properties
 		// If user selected any tank
