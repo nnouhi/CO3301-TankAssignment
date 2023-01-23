@@ -22,6 +22,9 @@
     <Filter Include="XML">
       <UniqueIdentifier>{b16d0b05-b1bb-46be-8dbb-5784ac420d52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{7dd49a0b-a549-4f4b-96a4-37a938e8a876}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Scene\Camera.cpp">
@@ -130,6 +133,24 @@
     </ClCompile>
     <ClCompile Include="Source\Render\CParticleSystem.cpp">
       <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui-master\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui-master\examples\imgui_impl_win32.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui-master\examples\imgui_impl_dx10.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui-master\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui-master\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui-master\imgui.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

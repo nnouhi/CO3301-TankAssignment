@@ -134,14 +134,14 @@ bool CTankEntity::Update( TFloat32 updateTime )
 				}
 				break;
 			case Msg_Stop:
-				if (m_State != Inactive)
-				{
-					UpdateState(Inactive);
-				}
+				UpdateState(Inactive);
 				break;
 			case Msg_Hit:
 				OnHit(msg.damageToApply);
 				break;
+			case Msg_Patrol:
+					UpdateState(Patrol);
+					break;
 			case Msg_Evade:
 				if (CanEnterEvadeState())
 				{
@@ -565,6 +565,13 @@ bool CTankEntity::IsAliveAfterHit(TInt32 damageToApply)
 
 void CTankEntity::UpdateState(EState newState)
 {
+
+	// Validate 
+	if (newState == m_State)
+	{
+		return;
+	}
+
 	m_Speed = 0.0f;
 
 	// Prepare new variables (if any) that will be used in new state
