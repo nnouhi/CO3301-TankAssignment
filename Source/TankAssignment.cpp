@@ -73,7 +73,7 @@ extern CMessenger Messenger;
 CEntityManager EntityManager;
 CParseLevel LevelParser(&EntityManager);
 CRayCast ray = &EntityManager;
-CParticalSystem particalSystem;
+CParticalSystem particleSystem;
 
 // Tank UIDs
 //TEntityUID TankA;
@@ -159,7 +159,7 @@ bool SceneSetup()
 	// Ambient light level
 	AmbientLight = SColourRGBA(0.6f, 0.6f, 0.6f, 1.0f);
 
-	particalSystem.Setup();
+	particleSystem.Setup();
 	return true;
 }
 
@@ -192,6 +192,8 @@ void SceneShutdown()
 // Draw one frame of the scene
 void RenderScene( float updateTime )
 {
+	tankEntities = EntityManager.GetTankEntities();
+
 	//IMGUI
 	//*******************************
 	// Prepare ImGUI for this frame
@@ -229,7 +231,7 @@ void RenderScene( float updateTime )
 	// Render entities and draw on-screen text
 	EntityManager.RenderAllEntities();
 	RenderSceneText( updateTime );
-	particalSystem.Render(updateTime);
+	particleSystem.Render(updateTime);
 
 	TankManagerGUI();
 	
@@ -388,12 +390,12 @@ void UpdateScene( float updateTime )
 {
 	// Call all entity update functions
 	EntityManager.UpdateAllEntities( updateTime );
-	particalSystem.Update(updateTime);
+	particleSystem.Update(updateTime);
 	// Set camera speeds
 	// Key F1 used for full screen toggle
 	if (KeyHit(Key_F2)) CameraMoveSpeed = 5.0f;
 	if (KeyHit(Key_F3)) CameraMoveSpeed = 40.0f;
-	if (KeyHit(Key_F4)) particalSystem.ResetParticles();
+	if (KeyHit(Key_F4)) particleSystem.ResetParticles();
 
 	if (m_MainCamera == FreeMovingCamera)
 	{
@@ -663,8 +665,41 @@ void TankManagerGUI(bool* p_open)
 	{
 		ImGui::Text("Select Tank");
 		ImGui::Separator();
+		ImGui::Spacing();
 
-		// Select tanks
+		// Create buttons for each alive tank
+		static int selectedTank = -1;
+		for (int i = 0; i < tankEntities.size(); i++)
+		{
+			if (i == 0)
+			{
+				ImGui::Text("Team A");
+			}
+			else if (i == tankEntities.size() / 2)
+			{
+				ImGui::Text("Team B");
+			}
+
+			char tankName[100];
+			strcpy(tankName, "Tank: ");
+			strcat(tankName, tankEntities[i]->GetName().c_str());
+			if (ImGui::Button(tankName))
+			{
+				selectedTank = i;
+			}
+
+			// If on same team add them in the same line
+			// else change line
+			if (i + 1 != tankEntities.size())
+			{
+				if (tankEntities[i]->GetTeam() == tankEntities[i + 1]->GetTeam())
+				{
+					ImGui::SameLine();			
+				}
+			}
+		}
+
+		// Select tanks - failed code commented
 		/*char* listbox_items[] = 
 		{ 
 			"A-1",
@@ -676,7 +711,7 @@ void TankManagerGUI(bool* p_open)
 			"B-3"
 		};*/
 
-		TInt32 numberOfTanks = NumOfTanks;
+		/*TInt32 numberOfTanks = NumOfTanks;
 		TInt32 charactersPerName = 3;
 
 		char** listbox_items = new char* [numberOfTanks];
@@ -684,29 +719,31 @@ void TankManagerGUI(bool* p_open)
 		{
 			listbox_items[i] = new char[charactersPerName];
 			listbox_items[i] = (char*)tankEntities[i]->GetName().c_str();
-		}
+		}*/
 		
-		static int listbox_item_current = -1;
-		char result[100];
+		/*char result[100];
 		strcpy(result, "Selected Tank: ");
-		strcat(result, (listbox_item_current == -1) ? "None." : listbox_items[listbox_item_current]);
-		ImGui::ListBox(result, &listbox_item_current, listbox_items, IM_ARRAYSIZE(listbox_items), NumOfTanks);
+		strcat(result, (selectedTank == -1) ? "None." : listbox_items[selectedTank]);
+		ImGui::ListBox(result, &selectedTank, listbox_items, IM_ARRAYSIZE(listbox_items), NumOfTanks);*/
 		// end of Select tanks
 
 		// Tank Properties
 		// If user selected any tank
-		if (listbox_item_current != -1)
+		if (selectedTank != -1)
 		{
+			ImGui::Spacing();
+			ImGui::Text("Spectate");
+			ImGui::Separator();
 
 			// Spectate selected tank
-			string tankName = tankEntities[listbox_item_current]->GetName();
+			string tankName = tankEntities[selectedTank]->GetName();
 			string key = tankName;
 			char result[100];
 			strcpy(result, "Spectate ");
 			strcat(result, tankName.c_str());
 			if (ImGui::Button(result))
 			{
-				CurrentChaseCameraIndex = listbox_item_current;
+				CurrentChaseCameraIndex = selectedTank;
 				UpdateMainCamera(tankEntitiesMap[key]->GetChaseCamera());
 			}
 			// end of Spectate selected tank
@@ -759,20 +796,24 @@ void TankManagerGUI(bool* p_open)
 			strcat(currentState, tankEntitiesMap[key]->GetState().c_str());
 			ImGui::Text(currentState);
 
-
+			// Modify the tank's state
 			SMessage msg;
 			msg.from = SystemUID;
 
+			// Destroy state
 			if (ImGui::Button("Destroy"))
 			{
-				/*tankEntitiesMap[key]->UpdateState(CTankEntity::EState::Destruct);
+				msg.type = Msg_Hit;
+				msg.damageToApply = tankEntitiesMap[key]->GetMaxHP();
+				Messenger.SendMessage(tankEntitiesMap[key]->GetUID(), msg);
 				tankEntitiesMap.erase(key);
-				tankEntities.erase(tankEntities.begin() + listbox_item_current);
-				listbox_item_current = -1;*/
+				tankEntities.erase(tankEntities.begin() + selectedTank);
+				selectedTank = -1;
 			}
 
 			ImGui::SameLine();
 
+			// Patrol state
 			if (ImGui::Button("Patrol"))
 			{
 				msg.type = Msg_Patrol;
@@ -781,6 +822,7 @@ void TankManagerGUI(bool* p_open)
 
 			ImGui::SameLine();
 
+			// Evade state
 			if (ImGui::Button("Evade"))
 			{
 				msg.type = Msg_Evade;
@@ -789,6 +831,7 @@ void TankManagerGUI(bool* p_open)
 
 			ImGui::SameLine();
 
+			// Inactive state
 			if (ImGui::Button("Inactive"))
 			{
 				msg.type = Msg_Stop;

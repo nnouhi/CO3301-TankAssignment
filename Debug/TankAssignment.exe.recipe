@@ -2,21 +2,21 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TankAssignment.exe</FullPath>
+      <FullPath>\\CY014-DC\Roaming Profiles\nnouhi\Desktop\GamesDev2\CO3301-TankAssignment\TankAssignment.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\DX10ParticlesDraw.cso</FullPath>
+      <FullPath>\\CY014-DC\Roaming Profiles\nnouhi\Desktop\GamesDev2\CO3301-TankAssignment\DX10ParticlesDraw.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\DX10ParticlesUpdate.cso</FullPath>
+      <FullPath>\\CY014-DC\Roaming Profiles\nnouhi\Desktop\GamesDev2\CO3301-TankAssignment\DX10ParticlesUpdate.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\PassThruGS.cso</FullPath>
+      <FullPath>\\CY014-DC\Roaming Profiles\nnouhi\Desktop\GamesDev2\CO3301-TankAssignment\PassThruGS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TexOnly.cso</FullPath>
+      <FullPath>\\CY014-DC\Roaming Profiles\nnouhi\Desktop\GamesDev2\CO3301-TankAssignment\TexOnly.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
