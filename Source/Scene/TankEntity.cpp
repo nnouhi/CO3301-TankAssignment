@@ -58,7 +58,7 @@ extern CMessenger Messenger;
 // Will be needed to implement the required tank behaviour in the Update function below
 extern TEntityUID GetTankUID( int team );
 
-extern CRayCast ray;
+extern shared_ptr<CRayCast> ray;
 
 
 /*-----------------------------------------------------------------------------------------
@@ -210,18 +210,21 @@ void CTankEntity::PatrolBehaviour(TFloat32 updateTime)
 		m_CurrentPatrolPoint = (m_PatrolPoints.size() - 1 == m_CurrentPatrolPoint) ? m_CurrentPatrolPoint = 0 : m_CurrentPatrolPoint += 1;
 	}
 
-	
 	TEntityUID potentialEnemyUID;
-	if (CheckTurretAngle(ConeOfVisionWhenPatrolling, potentialEnemyUID))
-	{ 
-		m_EnemyUID = potentialEnemyUID;
-		UpdateState(Aim);
+	vector<CTankEntity*> enemyTanks = EntityManager.GetEnemyTeamTanks(GetTeam());
+	for each (CTankEntity * enemyTank in enemyTanks)
+	{
+		if (CheckTurretAngle(*enemyTank, ConeOfVisionWhenPatrolling, potentialEnemyUID))
+		{
+			m_EnemyUID = potentialEnemyUID;
+			UpdateState(Aim);
+		}
 	}
 }
 
 void CTankEntity::AimBehaviour(TFloat32 updateTime)
 {
-	CEntity* enemyTank = EntityManager.GetEntity(m_EnemyUID);
+	CTankEntity* enemyTank = static_cast<CTankEntity*>(EntityManager.GetEntity(m_EnemyUID));
 	if (m_Timer >= 0.0f)
 	{
 		m_Timer -= updateTime;
@@ -233,7 +236,7 @@ void CTankEntity::AimBehaviour(TFloat32 updateTime)
 			bool isRight = Dot(turretRight, turretToOtherTank) > 0.0f ? true : false;
 			
 			// Stop rotating if turret is almost facing enemy tank
-			if (!CheckTurretAngle(StopTurretRotationAngle, enemyTank))
+			if (!CheckTurretAngle(StopTurretRotationAngle, *enemyTank))
 			{
 				if (isRight)
 				{
@@ -255,7 +258,7 @@ void CTankEntity::AimBehaviour(TFloat32 updateTime)
 	else
 	{
 		// Don't bother firing a shell if the distance is long
-		if (Distance(Position(), enemyTank->Position()) < ShellDistance && !ray.RayBoxIntersect(Position(), GetTurretWorldMatrix().ZAxis(), "Building"))
+		if (Distance(Position(), enemyTank->Position()) < ShellDistance && !ray->RayBoxIntersect(Position(), GetTurretWorldMatrix().ZAxis(), "Building"))
 		{
 			if (m_Shell == 0)
 			{
@@ -462,44 +465,72 @@ void CTankEntity::RotateTurret(TFloat32 amount, TFloat32 updateTime)
 	Matrix(2).RotateLocalY(amount * updateTime);
 }
 
-bool CTankEntity::CheckTurretAngle(TFloat32 degreesBeforeAim, TEntityUID &enemyUID)
+bool CTankEntity::CheckTurretAngle(CTankEntity& enemyTank, TFloat32 degreesBeforeAim, TEntityUID &enemyUID)
 {
+	enemyUID = -1;
 	CMatrix4x4 turretWorldMatrix = GetTurretWorldMatrix();
-	vector<CTankEntity*> enemyTanks = EntityManager.GetEnemyTeamTanks(GetTeam());
-	for each (CTankEntity * enemyTank in enemyTanks)
+
+	// Has LOS
+	if (!ray->RayBoxIntersect(Position(), GetTurretWorldMatrix().ZAxis(), "Building"))
 	{
 		// Don't bother aiming if the distance is long
-		TFloat32 distance = Distance(Position(), enemyTank->Position());
-		if (distance < ShellDistance && !ray.RayBoxIntersect(Position(), GetTurretWorldMatrix().ZAxis(), "Building"))
+		TFloat32 distance = Distance(Position(), enemyTank.Position());
+		if (distance < ShellDistance)
 		{
 			// Find angle between 2 vectors: cosθ= u⋅v / ||u|| ||v||
 			CVector3 turretFacing = Normalise(turretWorldMatrix.ZAxis());
-			CVector3 turretToOtherTank = Normalise(enemyTank->Position() - Position());
+			CVector3 turretToOtherTank = Normalise(enemyTank.Position() - Position());
 			TFloat32 rotationOnTarget = Dot(turretFacing, turretToOtherTank);
 			TFloat32 rotationOnTargetDeg = ToDegrees(acos(rotationOnTarget));
+
+			// In cone of vision
 			if (rotationOnTargetDeg < degreesBeforeAim)
 			{
-				enemyUID = enemyTank->GetUID();
-				return true;
-			}
-			else
-			{
-				enemyUID = -1;
+				// NOTE: To whoever will be marking, if the below explanation doesn't make sense feel free to contact me 
+				// to explain in greater detail.
+				
+				// We have LOS, shell will reach the destination if we fire and we are 15 deg from enemy
+				// Precalculate if we will have LOS the moment the turret will be facing to the other tank (what happens in aim state basically)
+				// If when turret is facing the enemy tank and we don't have LOS don't switch to aim state and check 
+				// other tanks (more efficient)
+				CMatrix4x4 simulatedTurretWorldMatrix = turretWorldMatrix;
+				CVector3 turretRight = Normalise(turretWorldMatrix.XAxis());
+				CVector3 turretToTarget = Normalise(enemyTank.Position() - Position());
+				bool isRight = Dot(turretRight, turretToTarget) > 0.0f ? true : false;
+
+				if (isRight)
+				{
+					// Target on our right
+					simulatedTurretWorldMatrix.RotateLocalY(ToRadians(rotationOnTargetDeg));
+				}
+				else
+				{
+					// Target on our left 
+					simulatedTurretWorldMatrix.RotateLocalY(ToRadians(-rotationOnTargetDeg));
+				}
+				
+				// Check for LOS when turret will be facing enemy tank
+				if (!ray->RayBoxIntersect(Position(), simulatedTurretWorldMatrix.ZAxis(), "Building"))
+				{
+					enemyUID = enemyTank.GetUID();
+					return true;
+				}				
+
+				return false;
 			}
 		}
 	}
-			
-	enemyUID = -1;
+	
 	return false;
 }
 
-bool CTankEntity::CheckTurretAngle(TFloat32 degreesBeforeAim, CEntity* enemyTank)
+bool CTankEntity::CheckTurretAngle(TFloat32 degreesBeforeAim, CTankEntity& enemyTank)
 {
 	CMatrix4x4 turretWorldMatrix = GetTurretWorldMatrix();
 	
 	// Find angle between 2 vectors: cosθ= u⋅v / ||u|| ||v||
 	CVector3 turretFacing = Normalise(turretWorldMatrix.ZAxis());
-	CVector3 turretToOtherTank = Normalise(enemyTank->Position() - Position());
+	CVector3 turretToOtherTank = Normalise(enemyTank.Position() - Position());
 	TFloat32 rotationOnTarget = Dot(turretFacing, turretToOtherTank);
 	TFloat32 rotationOnTargetDeg = ToDegrees(acos(rotationOnTarget));
 				
@@ -550,8 +581,9 @@ void CTankEntity::FindClosestCrate(string crateType)
 
 void CTankEntity::UpdateChaseCamera()
 {
-	CVector3 facingVector = Normalise(Matrix().ZAxis());
-	CVector3 upVector = Normalise(Matrix().YAxis());
+	CMatrix4x4 turretWorldMatrix = GetTurretWorldMatrix();
+	CVector3 facingVector = Normalise(turretWorldMatrix.ZAxis());
+	CVector3 upVector = Normalise(turretWorldMatrix.YAxis());
 
 	// Multiplication to get the desired result
 	m_ChaseCamera->Position() = Position() - facingVector * 20.0f + upVector * 5.0f;

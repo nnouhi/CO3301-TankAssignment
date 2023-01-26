@@ -43,7 +43,7 @@ Mesh {
       0.000000;0.000000;0.000000;;
 
       TextureFilename {
-        "Sand.png";
+        "Bark.jpg";
       }
     }
   }

@@ -284,9 +284,9 @@ private:
 
 	void RotateTurret(TFloat32 amount, TFloat32 updateTime);
 
-	bool CheckTurretAngle(TFloat32 degreesBeforeAim, TEntityUID &enemyUID);
+	bool CheckTurretAngle(CTankEntity& enemyTank, TFloat32 degreesBeforeAim, TEntityUID &enemyUID);
 
-	bool CheckTurretAngle(TFloat32 degreesBeforeAim, CEntity* enemyTank);
+	bool CheckTurretAngle(TFloat32 degreesBeforeAim, CTankEntity& enemyTank);
 
 	void FindClosestCrate(string crateType);
 

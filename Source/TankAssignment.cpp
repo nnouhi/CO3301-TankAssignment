@@ -72,7 +72,7 @@ extern CMessenger Messenger;
 // Constructors
 CEntityManager EntityManager;
 CParseLevel LevelParser(&EntityManager);
-CRayCast ray = &EntityManager;
+shared_ptr<CRayCast> ray = CRayCast::Instance();
 CParticalSystem particleSystem;
 
 // Tank UIDs
@@ -351,7 +351,7 @@ void ShowTankInfo(stringstream& outText)
 			TInt32 tankHP = tankEntity->GetHP();
 			TInt32 shellsFired = tankEntity->GetShellsFired();
 			TInt32 shellsAvailable = tankEntity->GetShellsAvailable();
-			string tankIntersects = (ray.RayBoxIntersect(entityPosition, Normalise(tankEntity->GetTurretWorldMatrix().ZAxis()), "Building")) ? "Intersects" : "Not";
+			string tankIntersects = (ray->RayBoxIntersect(entityPosition, Normalise(tankEntity->GetTurretWorldMatrix().ZAxis()), "Building")) ? "Intersects" : "Not";
 
 			// Display extented info
 			if (ShowExtendedInformation)

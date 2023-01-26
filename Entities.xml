@@ -13,8 +13,12 @@
   
 
     <!-- Tank Types -->
-    <EntityTemplate Type="Tank" Name="Rogue Scout" Mesh="HoverTank02.x" MaxSpeed="40.0" Acceleration="4.2" TurnSpeed="2.0" TurretTurnSpeed="1.047" MaxHP="200" ShellDamage="20"/>
-    <EntityTemplate Type="Tank" Name="Oberon MkII" Mesh="HoverTank07.x" MaxSpeed="30.0" Acceleration="2.6" TurnSpeed="1.3" TurretTurnSpeed="0.785" MaxHP="180" ShellDamage="35"/>
+    <EntityTemplate Type="Tank" Name="Rogue Scout" Mesh="HoverTank01.x" MaxSpeed="30.0" Acceleration="2.0" TurnSpeed="2.0" TurretTurnSpeed="1.047" MaxHP="200" ShellDamage="25"/>
+    <EntityTemplate Type="Tank" Name="Rogue ScoutII" Mesh="HoverTank02.x" MaxSpeed="40.0" Acceleration="4.2" TurnSpeed="2.4" TurretTurnSpeed="1.500" MaxHP="220" ShellDamage="30"/>
+    <EntityTemplate Type="Tank" Name="Rogue ScoutIII" Mesh="HoverTank03.x" MaxSpeed="45.0" Acceleration="3.0" TurnSpeed="3.0" TurretTurnSpeed="0.605" MaxHP="210" ShellDamage="35"/>
+    <EntityTemplate Type="Tank" Name="Oberon Mk" Mesh="HoverTank04.x" MaxSpeed="32.0" Acceleration="3.2" TurnSpeed="2.5" TurretTurnSpeed="1.201" MaxHP="230" ShellDamage="35"/>
+    <EntityTemplate Type="Tank" Name="Oberon MkII" Mesh="HoverTank05.x" MaxSpeed="50.0" Acceleration="4.5" TurnSpeed="3.0" TurretTurnSpeed="1.605" MaxHP="180" ShellDamage="40"/>
+    <EntityTemplate Type="Tank" Name="Oberon MkIII" Mesh="HoverTank06.x" MaxSpeed="43.0" Acceleration="2.6" TurnSpeed="3.5" TurretTurnSpeed="0.785" MaxHP="195" ShellDamage="15"/>
 
     <!-- Other Types -->
     <EntityTemplate Type="Projectile" Name="Shell" Mesh="Bullet.x"/>
@@ -37,7 +41,7 @@
     <Entity Type="Floor" Name="Floor">
     </Entity>
     <Entity Type="Building" Name="Building">
-      <Position X="0.0" Y="0.0" Z="10000.0"/>
+      <Position X="0.0" Y="0.0" Z="0.0"/>
     </Entity>
 
     <!-- Scene objects Positions -->
@@ -52,7 +56,7 @@
 
     <!-- Tank Positions -->
     <!-- TEAM 0 -->
-    <Entity Type="Rogue Scout" Name="A-1" Team="0">
+    <Entity Type="Rogue Scout" Name="Maltezito YiIIV" Team="0">
       <Position X="-75.0" Y="0.5" Z="20.0"/>
       <Rotation X="0.0" Y="90.0" Z="0.0"/>
       <ListWaypoints>
@@ -61,7 +65,7 @@
         <Waypoint X="-30.0" Y="0.5" Z="-20.0"/>
       </ListWaypoints>
     </Entity>
-    <Entity Type="Rogue Scout" Name="A-2" Team="0">
+    <Entity Type="Rogue ScoutII" Name="Shaco MonsterIV" Team="0">
       <Position X="-65.0" Y="0.5" Z="0.0"/>
       <Rotation X="0.0" Y="90.0" Z="0.0"/>
       <ListWaypoints>
@@ -70,7 +74,7 @@
         <Waypoint X="-30.0" Y="0.5" Z="20.0"/>
       </ListWaypoints>
     </Entity>
-    <Entity Type="Rogue Scout" Name="A-3" Team="0">
+    <Entity Type="Rogue ScoutIII" Name="Nakiuz IronIII" Team="0">
       <Position X="-75.0" Y="0.5" Z="-20.0"/>
       <Rotation X="0.0" Y="90.0" Z="0.0"/>
       <ListWaypoints>
@@ -81,7 +85,7 @@
     </Entity>
 
     <!-- TEAM 1 -->
-    <Entity Type="Oberon MkII" Name="B-1" Team="1">
+    <Entity Type="Oberon Mk" Name="Ttsek NoheirVI" Team="1">
       <Position X="75.0" Y="0.5" Z="20.0"/>
       <Rotation X="0.0" Y="-90.0" Z="0.0"/>
       <ListWaypoints>
@@ -90,7 +94,7 @@
         <Waypoint X="30.0" Y="0.5" Z="-20.0"/>
       </ListWaypoints>
     </Entity>
-    <Entity Type="Oberon MkII" Name="B-2" Team="1">
+    <Entity Type="Oberon MkII" Name="Peris MafiozosX" Team="1">
       <Position X="65.0" Y="0.5" Z="0.0"/>
       <Rotation X="0.0" Y="-90.0" Z="0.0"/>
       <ListWaypoints>
@@ -99,7 +103,7 @@
         <Waypoint X="30.0" Y="0.5" Z="20.0"/>
       </ListWaypoints>
     </Entity>
-    <Entity Type="Oberon MkII" Name="B-3" Team="1">
+    <Entity Type="Oberon MkIII" Name="Bing Chilling" Team="1">
       <Position X="75.0" Y="0.5" Z="-20.0"/>
       <Rotation X="0.0" Y="-90.0" Z="0.0"/>
       <ListWaypoints>
@@ -121,22 +125,22 @@
     </Entity>
 
     <!-- Other objects -->
-    <Entity Type="Shell" Name="Projectile A-1" OwnerName="A-1">
+    <Entity Type="Shell" Name="Projectile A-1" OwnerName="Maltezito YiIIV">
       <Position X="0.0" Y="-10.0" Z ="0.0"/>
     </Entity>
-    <Entity Type="Shell" Name="Projectile A-2" OwnerName="A-2">
+    <Entity Type="Shell" Name="Projectile A-2" OwnerName="Shaco MonsterIV">
       <Position X="0.0" Y="-10.0" Z ="0.0"/>
     </Entity>
-    <Entity Type="Shell" Name="Projectile A-3" OwnerName="A-3">
+    <Entity Type="Shell" Name="Projectile A-3" OwnerName="Nakiuz IronIII">
       <Position X="0.0" Y="-10.0" Z ="0.0"/>
     </Entity>
-    <Entity Type="Shell" Name="Projectile B-1" OwnerName="B-1">
+    <Entity Type="Shell" Name="Projectile B-1" OwnerName="Ttsek NoheirVI">
       <Position X="0.0" Y="-10.0" Z ="0.0"/>
     </Entity>
-    <Entity Type="Shell" Name="Projectile B-2" OwnerName="B-2">
+    <Entity Type="Shell" Name="Projectile B-2" OwnerName="Peris MafiozosX">
       <Position X="0.0" Y="-10.0" Z ="0.0"/>
     </Entity>
-    <Entity Type="Shell" Name="Projectile B-3" OwnerName="B-3">
+    <Entity Type="Shell" Name="Projectile B-3" OwnerName="Bing Chilling">
       <Position X="0.0" Y="-10.0" Z ="0.0"/>
     </Entity>
 
