@@ -351,17 +351,22 @@ public:
 		return healthCrateCount;
 	}
 
-	const CEntity* GetBuilding()
+	vector<CEntity*> GetEntities(const string& name, const string& templateName = "",
+		const string& templateType = "")
 	{
-		CEntity* entity;
-		BeginEnumEntities("", "", "Building"); // Enumerate entities with ship templates
-		while ((entity = EnumEntity()) != 0)
+		TEntityIter entity = m_Entities.begin();
+		vector<CEntity*> entities;
+		while (entity != m_Entities.end())
 		{
-			return entity;
-			EndEnumEntities();
+			if ((*entity)->GetName() == name &&
+				(templateName.length() == 0 || (*entity)->Template()->GetName() == templateName) &&
+				(templateType.length() == 0 || (*entity)->Template()->GetType() == templateType))
+			{
+				entities.push_back((*entity));
+			}
+			++entity;
 		}
-		
-		
+		return entities;
 	}
 
 	const TInt32 GetTeamCount(TInt32 team)

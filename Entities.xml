@@ -40,9 +40,12 @@
     </Entity>
     <Entity Type="Floor" Name="Floor">
     </Entity>
-    <Entity Type="Building" Name="Building">
-      <Position X="0.0" Y="0.0" Z="0.0"/>
+    <Entity Type="Building" Name="Building" Number="3">
+      <Position X="0.0" Y="0.0" Z="0.0">
+        <Randomise X="150.0" Y="0.0" Z="110.0"/>
+      </Position>
     </Entity>
+    
 
     <!-- Scene objects Positions -->
     <Entity Type="Tree" Name="Tree" Number="100">
