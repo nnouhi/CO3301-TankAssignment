@@ -23,10 +23,14 @@ enum EMessageType
 {
 	Msg_Start,
 	Msg_Stop,
-	Msg_Hit,
 	Msg_Evade,
 	Msg_Patrol,
-	Msg_Help
+	Msg_Aim,
+	Msg_Hit,
+	Msg_FindAmmo,
+	Msg_FindHealth,
+	Msg_Help,
+	Msg_Destruct
 };
 
 // A message contains a type and the UID that sent it.

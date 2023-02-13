@@ -130,23 +130,32 @@ bool CTankEntity::Update( TFloat32 updateTime )
 			case Msg_Start:
 				if (m_State == Inactive)
 				{
-					UpdateState(Patrol);
+					m_State = Patrol;
 				}
 				break;
 			case Msg_Stop:
-				UpdateState(Inactive);
+				m_State = Inactive;
+				break;
+			case Msg_Evade:
+				if (CanEnterEvadeState())
+				{
+					m_State = Evade;
+				}
+				break;
+			case Msg_Patrol:
+				m_State = Patrol;
+				break;
+			case Msg_Aim:
+				m_State = Aim;
 				break;
 			case Msg_Hit:
 				OnHit(msg.damageToApply);
 				break;
-			case Msg_Patrol:
-					UpdateState(Patrol);
-					break;
-			case Msg_Evade:
-				if (CanEnterEvadeState())
-				{
-					UpdateState(Evade);
-				}
+			case Msg_FindAmmo:
+				m_State = FindAmmo;
+				break;
+			case Msg_FindHealth:
+				m_State = FindHealth;
 				break;
 			case Msg_Help:
 				m_TankToAssist = EntityManager.GetEntity(msg.from);
@@ -154,7 +163,10 @@ bool CTankEntity::Update( TFloat32 updateTime )
 				{
 					SetTargetPoint(m_TankToAssist->Position() + CVector3(Random(-2.5f, 2.5f), 0.0f, Random(-2.5f, 2.5f)));
 				}
-				UpdateState(Assist);
+				m_State = Assist;
+				break;
+			case Msg_Destruct:
+				m_State = Destruct;
 				break;
 		}
 	}
@@ -605,36 +617,48 @@ void CTankEntity::UpdateState(EState newState)
 	}
 
 	m_Speed = 0.0f;
+	
+	SMessage msg;
+	msg.from = GetUID();
 
-	// Prepare new variables (if any) that will be used in new state
 	switch (newState)
 	{
 		default:
 			break;
 		case Inactive:
+			msg.type = Msg_Stop;
 			break;
 		case Patrol:
 			m_Timer = 1.0f;
+			msg.type = Msg_Patrol;
 			break;
 		case Aim:
+			msg.type = Msg_Aim;
 			break;
 		case Evade:
 			if (!m_ControlledByPlayer)
 			{
 				SetTargetPoint(CVector3(Position() + GetRandomPoint(40.0f, 0.0f, 40.0f)));
 			}
+			msg.type = Msg_Evade;
 			break;
-		case FindAmmo: case FindHealth:
-			// NOTE: SplitString is a method that I am using to Split FindAmmo and FindHealth states to Ammo and Health
-			FindClosestCrate(SplitString(GetState(newState)));
+		case FindAmmo: 
+			msg.type = Msg_FindAmmo;
+			FindClosestCrate("Ammo");
+			break;
+		case FindHealth:
+			msg.type = Msg_FindHealth;
+			FindClosestCrate("Health");
 			break;
 		case Assist:
+			msg.type = Msg_Help;
 			break;
 		case Destruct:
+			msg.type = Msg_Destruct;
 			break;
 	}
-
-	m_State = newState;
+	Messenger.SendMessage(GetUID(), msg);
+	//m_State = newState;
 }
 
 void CTankEntity::OnHit(TInt32 damageToApply)
@@ -681,7 +705,6 @@ void CTankEntity::OnHit(TInt32 damageToApply)
 				UpdateState(FindHealth);
 			}
 		}
-
 	}
 	else
 	{

@@ -1,13 +1,3 @@
-﻿  ParseLevel.cpp
-  RayCast.cpp
-  AmmoCrateEntity.cpp
-  EntityManager.cpp
-  HealthCrateEntity.cpp
-  MineEntity.cpp
-  ShellEntity.cpp
-  TankEntity.cpp
-  TankAssignment.cpp
-\\CY014-DC\Roaming Profiles\nnouhi\Desktop\GamesDev2\CO3301-TankAssignment\Source\TankAssignment.cpp(681,21): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-\\CY014-DC\Roaming Profiles\nnouhi\Desktop\GamesDev2\CO3301-TankAssignment\Source\Scene\EntityManager.h(220): warning C4715: 'gen::CEntityManager::GetTanksShell': not all control paths return a value
-  TankAssignment.vcxproj -> \\CY014-DC\Roaming Profiles\nnouhi\Desktop\GamesDev2\CO3301-TankAssignment\TankAssignment.exe
+﻿  TankEntity.cpp
+D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\Source\Scene\EntityManager.h(220): warning C4715: 'gen::CEntityManager::GetTanksShell': not all control paths return a value
+  TankAssignment.vcxproj -> D:\Year 4 Computing\Games Development 2\Assignment\CO3301-TankAssignment\TankAssignment.exe
