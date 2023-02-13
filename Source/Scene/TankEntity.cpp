@@ -177,6 +177,7 @@ bool CTankEntity::Update( TFloat32 updateTime )
 		default: 
 			break;
 		case Inactive:
+			m_Speed = 0.0f;
 			break;
 		case Patrol:
 			PatrolBehaviour(updateTime);
